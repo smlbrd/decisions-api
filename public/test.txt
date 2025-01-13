@@ -1,3 +1,0 @@
-If you can read this, the static folder works!
-
-You could slap a load of html in here and have a static site...
