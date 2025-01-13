@@ -1,13 +1,26 @@
+const connectDB = require('./database/database');
+const koa = require('koa');
+const server = new koa();
+const static = require('koa-static');
 const Router = require('koa-router');
-const controller = require('./controller');
-const User = require('./model');
+const controller = require('./controllers/user.controller');
+const route = new Router();
 
-const router = new Router();
+connectDB();
 
-router.get('/', (ctx) => {
-  ctx.body = 'workled';
+route.get('/', (ctx) => {
+  ctx.status = 200;
+  ctx.message = 'OK';
+  ctx.body = 'Server online!';
 });
+route.get('/users', controller.getUsers);
+route.get('/users/:userId', controller.getUserById);
 
-router.get('/users', controller.getUserByName);
+// Middleware
+server.use(route.routes());
+server.use(static('./public'));
 
-module.exports = router;
+// Listener
+server.listen(5175, 'localhost', () =>
+  console.log('Server up! Listening on Port 5175!')
+);
