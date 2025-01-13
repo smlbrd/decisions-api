@@ -1,22 +1,19 @@
-const User = require('../models/user.model');
-
-/* 6784d64b844f23ac9810cf21
-ctx.params.id*/
+const User = require("../models/user.model");
 
 const controller = {
   test: (ctx) => {
-    ctx.body = 'test success!';
+    ctx.body = "test success!";
   },
   getUserById: async (ctx) => {
     const userId = ctx.params.userId;
-    console.log('Request:', userId);
+    console.log("Request:", userId);
 
     try {
       const user = await User.findById({ _id: userId });
 
       if (!user) {
         ctx.status = 404;
-        ctx.body = { error: 'No results! :c' };
+        ctx.body = { error: "No results! :c" };
       } else {
         ctx.status = 200;
         ctx.body = user;
@@ -33,9 +30,9 @@ const controller = {
       ctx.status = 200;
       ctx.body = users;
     } catch (err) {
-      console.log('Error:', err);
+      console.log("Error:", err);
       ctx.status = 500;
-      ctx.body = { err: 'oops!' };
+      ctx.body = { err: "oops!" };
     }
   },
 };
