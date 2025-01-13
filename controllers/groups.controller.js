@@ -18,7 +18,21 @@ const groupController = {
             ctx.status = 500;
             ctx.body = err;
         }
+    }, 
+    postGroup: async (ctx) => {
+        const newGroup = new Group(ctx.request.body)
+        try {
+            await newGroup.save()
+            ctx.status = 201
+            ctx.body = newGroup
+        }
+        catch (err){
+            console.log(err);
+            ctx.status = 500;
+            ctx.body = err;
+        }
     }
 }
+
 
 module.exports = groupController;
