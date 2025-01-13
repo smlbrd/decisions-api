@@ -4,7 +4,7 @@ const server = new koa();
 const static = require('koa-static');
 const Router = require('koa-router');
 const controller = require('./controllers/user.controller');
-const listController = require('./controllers/list.controller');
+const groupController = require('./controllers/groups.controller');
 
 const route = new Router();
 
@@ -17,7 +17,7 @@ route.get('/', (ctx) => {
 });
 route.get('/users', controller.getUsers);
 route.get('/users/:userId', controller.getUserById);
-route.get('/lists/:listId', listController.getListById);
+route.get('/groups/:groupId', groupController.getGroupById);
 
 // Middleware
 server.use(route.routes());
