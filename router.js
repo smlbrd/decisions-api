@@ -1,9 +1,16 @@
-const Router = require("koa-router")
+const Router = require("koa-router");
+const controller = require("./controller");
 
-const controller = require("./controller") 
+const router = new Router();
 
-const router = new Router
+router.get("/", (ctx) => {
+  ctx.body = "workled";
+});
 
-router.get("/users", controller.getUsers) 
+const User = require("./model");
+router.get("/users", async (ctx) => {
+    const users = await User.find()
+    ctx.body = users;
+  });
 
-module.exports = router
+module.exports = router;

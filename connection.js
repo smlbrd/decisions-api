@@ -1,19 +1,25 @@
-const mongoose = require('mongoose'); 
+require("dotenv").config();
+const uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.3.8/"
+/* put back into uri process.env.URI; */ // dotenv URI
+const mongoose = require("mongoose");
 //Provides the methods/schemas/and more to interact with the db
+// Database connection: Uniform Resource Identifier
 
-// Database connection: Uniform Resource Identifier 
-
-const connectDB = async () => {
-  const dbURI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/users'; 
-  // Use an environment variable or a default URI. - look up env variables
-
+async function connectDb() {
   try {
-    await mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
-    console.log('MongoDB connected');
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB connected!!!");
   } catch (err) {
-    console.error('MongoDB connection error:', err);
-    process.exit(1); 
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
   }
-};
+}
 
-module.exports = connectDB;
+connectDb().catch((err) => {
+    console.log("Err - database not connected", err)
+})
+
+module.exports = connectDb;
