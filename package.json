@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.7",
     "jest": "^29.7.0",
     "koa": "^2.15.3",
     "koa-router": "^13.0.1",
