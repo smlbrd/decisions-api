@@ -31,7 +31,7 @@ describe('GET /', () => {
 });
 
 describe('GET /users/:userId', () => {
-  test('200: responds with user for corresponding ID', async () => {
+  test('200: responds with user for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
 
     const response = await request(app.callback()).get(`/users/${testId}`);
@@ -47,6 +47,15 @@ describe('GET /users/:userId', () => {
         __v: 0,
       })
     );
+  });
+  test('404: responds with error if cannot match user ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).get(`/users/${invalidId}`);
+
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('No results!');
   });
 });
 
@@ -79,7 +88,6 @@ describe('Error handling middleware', () => {
     const response = await request(app.callback()).get(
       '/non-existent-endpoint'
     );
-    console.log(response);
     expect(response.status).toBe(404);
     expect(response.text).toBe('Not Found');
   });
