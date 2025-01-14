@@ -7,6 +7,7 @@ const usersData = require('../database/test-data/test-users');
 const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
+const decisionsData = require('../database/test-data/test-decisions');
 
 const uri = process.env.DATABASE_URI;
 
@@ -15,7 +16,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await seed(usersData, groupsData, listsData, optionsData);
+  await seed(usersData, groupsData, listsData, optionsData, decisionsData);
 });
 
 afterAll(async () => {
