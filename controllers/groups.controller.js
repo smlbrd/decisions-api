@@ -1,4 +1,4 @@
-const Group = require("../models/groups.model");
+const Group = require('../models/groups.model');
 
 const groupController = {
   getGroupById: async (ctx) => {
@@ -8,7 +8,7 @@ const groupController = {
 
       if (!group) {
         ctx.status = 404;
-        ctx.body = { error: "No results!" };
+        ctx.body = { error: 'No results!' };
       } else {
         ctx.status = 200;
         ctx.body = group;
@@ -47,9 +47,25 @@ const groupController = {
         ctx.status = 500;
         ctx.body = { error: "Internal server error" };
       }
-    
+  },
+    getMembersByGroupId: async (ctx) => {
+    const groupId = ctx.params.groupId;
+
+    try {
+      const group = await Group.findById(groupId).populate('members');
+
+      if (!group) {
+        ctx.status = 404;
+        ctx.body = { error: 'No results!' };
+      } else {
+        ctx.status = 200;
+        ctx.body = group.members;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
   },
 };
 
 module.exports = groupController;
-
