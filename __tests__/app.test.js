@@ -59,6 +59,22 @@ describe('GET /users/:userId', () => {
   });
 });
 
+describe('GET /users/:userId/saved_lists', () => {
+  test('200: responds with a populated array of lists based on user ID', async () => {
+    const userId = '6784d64b844f23ac9810cf21';
+
+    await request(app.callback())
+      .get(`/users/${userId}/saved_lists`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.length).toBe(1);
+        expect(body[0]._id).toBe('6784d7a5844f23ac9810cf30');
+        expect(body[0].title).toBe('Weekly Standup');
+        expect(body[0].owner).toBe('6784d64b844f23ac9810cf21');
+      });
+  });
+});
+
 describe('GET /groups/:groupId', () => {
   test('200: responds with group for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
@@ -262,18 +278,20 @@ describe('PUT /users/:userId', () => {
   test('200: responds with updated user information for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
     const userUpdate = {
-      "username": "sparkle_unicorn 10",
-      "name": "No more unicorns",
-      "email": "sparkles@testmail.com"
-    }
-    const response = await request(app.callback()).put(`/users/${testId}`).send(userUpdate);
+      username: 'sparkle_unicorn 10',
+      name: 'No more unicorns',
+      email: 'sparkles@testmail.com',
+    };
+    const response = await request(app.callback())
+      .put(`/users/${testId}`)
+      .send(userUpdate);
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
-        _id: "6784d64b844f23ac9810cf21",
-        username: "sparkle_unicorn 10",
-        name: "No more unicorns",
-        email: "sparkles@testmail.com",
+        _id: '6784d64b844f23ac9810cf21',
+        username: 'sparkle_unicorn 10',
+        name: 'No more unicorns',
+        email: 'sparkles@testmail.com',
         createdAt: expect.any(String),
         __v: 0,
       })
@@ -282,11 +300,13 @@ describe('PUT /users/:userId', () => {
   test('404: responds with error if cannot match user ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
     const userUpdate = {
-      "username": "sparkle_unicorn 10",
-      "name": "No more unicorns",
-      "email": "sparkles@testmail.com"
-    }
-    const response = await request(app.callback()).put(`/users/${invalidId}`).send(userUpdate);
+      username: 'sparkle_unicorn 10',
+      name: 'No more unicorns',
+      email: 'sparkles@testmail.com',
+    };
+    const response = await request(app.callback())
+      .put(`/users/${invalidId}`)
+      .send(userUpdate);
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('User not found');
   });
