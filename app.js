@@ -10,6 +10,15 @@ const bodyParser = require("koa-bodyparser");
 
 connectDB();
 
+app.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    err.status = err.statusCode || err.status || 500;
+    throw err;
+  }
+});
+
 app.use(bodyParser());
 app.use(route.routes());
 
