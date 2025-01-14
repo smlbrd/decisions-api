@@ -39,7 +39,7 @@ route.get('/groups/:groupId', groupController.getGroupById);
 route.get('/groups/:groupId/members', groupController.getMembersByGroupId);
 route.post('/groups', groupController.postGroup);
 route.post("/lists", listController.postList);
+route.put("/groups/:groupId", groupController.editGroupById)
 route.put('/users/:userId', userController.updateUserById);
-
 
 module.exports = app;
