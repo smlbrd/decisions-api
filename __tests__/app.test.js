@@ -171,3 +171,37 @@ describe('Error handling middleware', () => {
     expect(response.text).toBe('Not Found');
   });
 });
+//// TESTING USER UPDATE
+describe('PUT /users/:userId', () => {
+  test('200: responds with updated user information for corresponding user ID', async () => {
+    const testId = '6784d64b844f23ac9810cf21';
+    const userUpdate = {
+      "username": "sparkle_unicorn 10",
+      "name": "No more unicorns",
+      "email": "sparkles@testmail.com"
+    }
+    const response = await request(app.callback()).put(`/users/${testId}`).send(userUpdate);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: "6784d64b844f23ac9810cf21",
+        username: "sparkle_unicorn 10",
+        name: "No more unicorns",
+        email: "sparkles@testmail.com",
+        createdAt: expect.any(String),
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot match user ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const userUpdate = {
+      "username": "sparkle_unicorn 10",
+      "name": "No more unicorns",
+      "email": "sparkles@testmail.com"
+    }
+    const response = await request(app.callback()).put(`/users/${invalidId}`).send(userUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('User not found');
+  });
+});
