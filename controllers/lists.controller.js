@@ -20,6 +20,18 @@ const controller = {
       ctx.body = err;
     }
   },
+  postList: async (ctx) => {
+    const newList = new List(ctx.request.body);
+    try {
+      await newList.save();
+      ctx.status = 201;
+      ctx.body = newList;
+    } catch (err) {
+      console.log(err);
+      ctx.status = 500;
+      ctx.body = err;
+    }
+  },
 };
 
 module.exports = controller;
