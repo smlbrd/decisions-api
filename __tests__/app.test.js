@@ -263,6 +263,26 @@ describe('PUT /groups/:group_id', () => {
   });
 });
 
+describe('DELETE /groups/:groupId', () => {
+  test('204: deletes group by groupId', async () => {
+    const groupId = '6784d715844f23ac9810cf28';
+
+    const response = await request(app.callback()).delete(`/groups/${groupId}`);
+
+    expect(response.status).toBe(204);
+  });
+  test('404: responds with an error message for invalid groupId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).delete(
+      `/groups/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Group Not Found');
+  });
+});
+
 describe('Error handling middleware', () => {
   test('404: responds with an error message for invalid route', async () => {
     const response = await request(app.callback()).get(
@@ -272,6 +292,7 @@ describe('Error handling middleware', () => {
     expect(response.text).toBe('Not Found');
   });
 });
+
 describe('PUT /users/:userId', () => {
   test('200: responds with updated user information for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
