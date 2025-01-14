@@ -223,7 +223,8 @@ describe("PUT /groups/:group_id", () => {
         { _id: "6784d64b844f23ac9810cf21" },
         { _id: "6784d64b844f23ac9810cf22" },
         { _id: "6784d64b844f23ac9810cf23" },
-      ],}
+      ],
+    }
 
     const response = await request(app.callback())
       .put(`/groups/${groupId}`)
@@ -253,7 +254,8 @@ describe("PUT /groups/:group_id", () => {
         { _id: "6784d64b844f23ac9810cf21" },
         { _id: "6784d64b844f23ac9810cf22" },
         { _id: "6784d64b844f23ac9810cf23" },
-      ]}
+      ]
+    }
 
     const response = await request(app.callback())
       .put(`/groups/${invalidGroupId}`)
@@ -309,5 +311,47 @@ describe('PUT /users/:userId', () => {
       .send(userUpdate);
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('User not found');
+  });
+});
+describe('PUT /lists/:listId', () => {
+  test('200: responds with updated list information for corresponding list ID', async () => {
+    const testId = '6784d7a5844f23ac9810cf30';
+    const listUpdate = {
+      title: 'Weekly Standup Test',
+      description: 'A test list update',
+      options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+      owner: '6784d64b844f23ac9810cf21',
+      members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${testId}`)
+      .send(listUpdate);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d7a5844f23ac9810cf30',
+        title: 'Weekly Standup Test',
+        description: 'A test list update',
+        options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+        owner: '6784d64b844f23ac9810cf21',
+        members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot match user ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const listUpdate = {
+      title: 'Weekly Standup Test',
+      description: 'A test list update',
+      options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+      owner: '6784d64b844f23ac9810cf21',
+      members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${invalidId}`)
+      .send(listUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List not found');
   });
 });

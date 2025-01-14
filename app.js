@@ -43,6 +43,6 @@ route.post('/groups', groupController.postGroup);
 route.post('/lists', listController.postList);
 route.put("/groups/:groupId", groupController.editGroupById)
 route.put('/users/:userId', userController.updateUserById);
-
+route.put('/lists/:listId', listController.updateListById);
 
 module.exports = app;
