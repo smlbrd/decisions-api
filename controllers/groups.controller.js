@@ -34,21 +34,27 @@ const groupController = {
     const groupId = ctx.params.groupId;
     const updatedField = ctx.request.body;
 
-    try {const updatedGroup = await Group.findByIdAndUpdate(groupId, updatedField, {
-        new: true,
-      });
+    try {
+      const updatedGroup = await Group.findByIdAndUpdate(
+        groupId,
+        updatedField,
+        {
+          new: true,
+        }
+      );
       if (!updatedGroup) {
         ctx.status = 404;
-        ctx.body = { error: "Put unsuccessful" };
+        ctx.body = { error: 'Put unsuccessful' };
       } else {
         ctx.status = 200;
         ctx.body = updatedGroup;
-      }} catch (err) {
-        ctx.status = 500;
-        ctx.body = { error: "Internal server error" };
       }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
   },
-    getMembersByGroupId: async (ctx) => {
+  getMembersByGroupId: async (ctx) => {
     const groupId = ctx.params.groupId;
 
     try {
@@ -60,6 +66,23 @@ const groupController = {
       } else {
         ctx.status = 200;
         ctx.body = group.members;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
+  },
+  deleteGroupById: async (ctx) => {
+    const groupId = ctx.params.groupId;
+
+    try {
+      const group = await Group.findOneAndDelete({ _id: groupId });
+
+      if (!group) {
+        ctx.status = 404;
+        ctx.body = { error: 'Group Not Found' };
+      } else {
+        ctx.status = 204;
       }
     } catch (err) {
       ctx.status = 500;
