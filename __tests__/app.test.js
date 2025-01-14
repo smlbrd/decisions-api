@@ -7,6 +7,7 @@ const usersData = require('../database/test-data/test-users');
 const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
+const decisionsData = require('../database/test-data/test-decisions');
 
 const uri = process.env.DATABASE_URI;
 
@@ -15,7 +16,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await seed(usersData, groupsData, listsData, optionsData);
+  await seed(usersData, groupsData, listsData, optionsData, decisionsData);
 });
 
 afterAll(async () => {
@@ -29,7 +30,6 @@ describe('GET /', () => {
     expect(response.text).toBe('Server online!');
   });
 });
-
 
 describe('GET /users/:userId', () => {
   test('200: responds with user for corresponding user ID', async () => {
@@ -49,13 +49,13 @@ describe('GET /users/:userId', () => {
       })
     );
   });
-  test("404: responds with error if cannot match user ID", async () => {
-    const invalidId = "00000a00000b00000c00000d";
+  test('404: responds with error if cannot match user ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
 
     const response = await request(app.callback()).get(`/users/${invalidId}`);
 
     expect(response.status).toBe(404);
-    expect(response.body.error).toBe("No results!");
+    expect(response.body.error).toBe('No results!');
   });
 });
 
@@ -98,7 +98,6 @@ describe('GET /groups/:groupId', () => {
     );
   });
 });
-
 
 describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
@@ -211,19 +210,18 @@ describe('POST /lists', () => {
   });
 });
 
-
-describe("PUT /groups/:group_id", () => {
-  test("200: edits a group and responds with the updated group", async () => {
-
-    const groupId = "6784d715844f23ac9810cf28";
+describe('PUT /groups/:group_id', () => {
+  test('200: edits a group and responds with the updated group', async () => {
+    const groupId = '6784d715844f23ac9810cf28';
     const newDescription = {
-      name: "Gardens",
-      description: "A club for anyone who gardens in their garden.",
+      name: 'Gardens',
+      description: 'A club for anyone who gardens in their garden.',
       members: [
-        { _id: "6784d64b844f23ac9810cf21" },
-        { _id: "6784d64b844f23ac9810cf22" },
-        { _id: "6784d64b844f23ac9810cf23" },
-      ],}
+        { _id: '6784d64b844f23ac9810cf21' },
+        { _id: '6784d64b844f23ac9810cf22' },
+        { _id: '6784d64b844f23ac9810cf23' },
+      ],
+    };
 
     const response = await request(app.callback())
       .put(`/groups/${groupId}`)
@@ -237,36 +235,36 @@ describe("PUT /groups/:group_id", () => {
       members: [
         '6784d64b844f23ac9810cf21',
         '6784d64b844f23ac9810cf22',
-        '6784d64b844f23ac9810cf23'
+        '6784d64b844f23ac9810cf23',
       ],
       createdAt: expect.any(String),
-      __v: 0
+      __v: 0,
     });
   });
-  test("404: responds with an error if PUT path is to an invalid groupId", async () => {
-    const invalidGroupId = "00000a00000b00000c00000d";
+  test('404: responds with an error if PUT path is to an invalid groupId', async () => {
+    const invalidGroupId = '00000a00000b00000c00000d';
 
     const newDescription = {
-      name: "Gardens",
-      description: "A club for anyone who gardens in their garden.",
+      name: 'Gardens',
+      description: 'A club for anyone who gardens in their garden.',
       members: [
-        { _id: "6784d64b844f23ac9810cf21" },
-        { _id: "6784d64b844f23ac9810cf22" },
-        { _id: "6784d64b844f23ac9810cf23" },
-      ]}
+        { _id: '6784d64b844f23ac9810cf21' },
+        { _id: '6784d64b844f23ac9810cf22' },
+        { _id: '6784d64b844f23ac9810cf23' },
+      ],
+    };
 
     const response = await request(app.callback())
       .put(`/groups/${invalidGroupId}`)
       .send(newDescription);
 
     expect(response.status).toBe(404);
-    expect(response.body.error).toBe("Put unsuccessful");
+    expect(response.body.error).toBe('Put unsuccessful');
   });
 });
 
 describe('Error handling middleware', () => {
   test('404: responds with an error message for invalid route', async () => {
-
     const response = await request(app.callback()).get(
       '/non-existent-endpoint'
     );
