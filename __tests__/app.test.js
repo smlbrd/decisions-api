@@ -82,6 +82,7 @@ describe('GET /groups/:groupId', () => {
   });
 });
 
+
 describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
@@ -128,6 +129,37 @@ describe('POST /groups', () => {
         __v: 0,
       })
     );
+  });
+});
+
+describe('GET /lists/:listId', () => {
+  test('200: responds with a list for corresponding list ID', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    await request(app.callback())
+      .get(`/lists/${listId}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body._id).toBe('6784d7a5844f23ac9810cf30');
+        expect(body.title).toBe('Weekly Standup');
+        expect(body.description).toBe(
+          'A list for organizing weekly standup meetings'
+        );
+        expect(body.options.length).toBe(2);
+        expect(body.options[0]).toBe('6784d7b5844f23ac9810cf31');
+        expect(body.options[1]).toBe('6784d7b5844f23ac9810cf32');
+        expect(body.owner).toBe('6784d64b844f23ac9810cf21');
+      });
+  });
+  test('404: responds with error if cannot match list ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    await request(app.callback())
+      .get(`/lists/${invalidId}`)
+      .expect(404)
+      .then(({ body: { error } }) => {
+        expect(error).toBe('No results!');
+      });
   });
 });
 
