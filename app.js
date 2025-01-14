@@ -40,5 +40,6 @@ route.get('/lists/:listId', listController.getListByListId);
 route.get('/groups/:groupId', groupController.getGroupById);
 route.post('/groups', groupController.postGroup);
 route.post("/lists", listController.postList);
+route.put("/groups/:groupId", groupController.editGroupById)
 
 module.exports = app;
