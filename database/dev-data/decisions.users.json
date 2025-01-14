@@ -1,8 +1,0 @@
-[{
-  "_id": {
-    "$oid": "6784d64b844f23ac9810cf21"
-  },
-  "username": "test_user1",
-  "name": "testy",
-  "email": "test@testmail.com"
-}]

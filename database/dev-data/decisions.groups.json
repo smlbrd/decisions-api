@@ -1,7 +1,0 @@
-[{
-  "_id": {
-    "$oid": "6784d715844f23ac9810cf28"
-  },
-  "group_name": "test_group1",
-  "group_desc": "it is a test group"
-}]
