@@ -30,6 +30,7 @@ describe('GET /', () => {
   });
 });
 
+
 describe('GET /users/:userId', () => {
   test('200: responds with user for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
@@ -48,13 +49,13 @@ describe('GET /users/:userId', () => {
       })
     );
   });
-  test('404: responds with error if cannot match user ID', async () => {
-    const invalidId = '00000a00000b00000c00000d';
+  test("404: responds with error if cannot match user ID", async () => {
+    const invalidId = "00000a00000b00000c00000d";
 
     const response = await request(app.callback()).get(`/users/${invalidId}`);
 
     expect(response.status).toBe(404);
-    expect(response.body.error).toBe('No results!');
+    expect(response.body.error).toBe("No results!");
   });
 });
 
@@ -97,6 +98,7 @@ describe('GET /groups/:groupId', () => {
     );
   });
 });
+
 
 describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
@@ -147,6 +149,37 @@ describe('POST /groups', () => {
   });
 });
 
+describe('GET /lists/:listId', () => {
+  test('200: responds with a list for corresponding list ID', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    await request(app.callback())
+      .get(`/lists/${listId}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body._id).toBe('6784d7a5844f23ac9810cf30');
+        expect(body.title).toBe('Weekly Standup');
+        expect(body.description).toBe(
+          'A list for organizing weekly standup meetings'
+        );
+        expect(body.options.length).toBe(2);
+        expect(body.options[0]).toBe('6784d7b5844f23ac9810cf31');
+        expect(body.options[1]).toBe('6784d7b5844f23ac9810cf32');
+        expect(body.owner).toBe('6784d64b844f23ac9810cf21');
+      });
+  });
+  test('404: responds with error if cannot match list ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    await request(app.callback())
+      .get(`/lists/${invalidId}`)
+      .expect(404)
+      .then(({ body: { error } }) => {
+        expect(error).toBe('No results!');
+      });
+  });
+});
+
 describe('POST /lists', () => {
   test('201: responds with newly posted list', async () => {
     const testList = {
@@ -178,8 +211,62 @@ describe('POST /lists', () => {
   });
 });
 
+
+describe("PUT /groups/:group_id", () => {
+  test("200: edits a group and responds with the updated group", async () => {
+
+    const groupId = "6784d715844f23ac9810cf28";
+    const newDescription = {
+      name: "Gardens",
+      description: "A club for anyone who gardens in their garden.",
+      members: [
+        { _id: "6784d64b844f23ac9810cf21" },
+        { _id: "6784d64b844f23ac9810cf22" },
+        { _id: "6784d64b844f23ac9810cf23" },
+      ],}
+
+    const response = await request(app.callback())
+      .put(`/groups/${groupId}`)
+      .send(newDescription);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({
+      _id: '6784d715844f23ac9810cf28',
+      name: 'Gardens',
+      description: 'A club for anyone who gardens in their garden.',
+      members: [
+        '6784d64b844f23ac9810cf21',
+        '6784d64b844f23ac9810cf22',
+        '6784d64b844f23ac9810cf23'
+      ],
+      createdAt: expect.any(String),
+      __v: 0
+    });
+  });
+  test("404: responds with an error if PUT path is to an invalid groupId", async () => {
+    const invalidGroupId = "00000a00000b00000c00000d";
+
+    const newDescription = {
+      name: "Gardens",
+      description: "A club for anyone who gardens in their garden.",
+      members: [
+        { _id: "6784d64b844f23ac9810cf21" },
+        { _id: "6784d64b844f23ac9810cf22" },
+        { _id: "6784d64b844f23ac9810cf23" },
+      ]}
+
+    const response = await request(app.callback())
+      .put(`/groups/${invalidGroupId}`)
+      .send(newDescription);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe("Put unsuccessful");
+  });
+});
+
 describe('Error handling middleware', () => {
   test('404: responds with an error message for invalid route', async () => {
+
     const response = await request(app.callback()).get(
       '/non-existent-endpoint'
     );
@@ -187,7 +274,6 @@ describe('Error handling middleware', () => {
     expect(response.text).toBe('Not Found');
   });
 });
-//// TESTING USER UPDATE
 describe('PUT /users/:userId', () => {
   test('200: responds with updated user information for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
