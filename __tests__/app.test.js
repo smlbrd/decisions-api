@@ -73,3 +73,14 @@ describe('GET /groups/:groupId', () => {
     );
   });
 });
+
+describe('Error handling middleware', () => {
+  test('404: responds with an error message for invalid route', async () => {
+    const response = await request(app.callback()).get(
+      '/non-existent-endpoint'
+    );
+    console.log(response);
+    expect(response.status).toBe(404);
+    expect(response.text).toBe('Not Found');
+  });
+});
