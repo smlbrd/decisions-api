@@ -47,6 +47,17 @@ const userController = {
       ctx.body = err;
     }
   },
+  postNewUser: async (ctx) => {
+    const newUser = new User(ctx.request.body);
+    try {
+      await newUser.save();
+      ctx.status = 201;
+      ctx.body = newUser;
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
+  },
 };
 
 module.exports = userController;
