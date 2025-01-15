@@ -216,6 +216,7 @@ describe('PUT /groups/:group_id', () => {
     const newDescription = {
       name: 'Gardens',
       description: 'A club for anyone who gardens in their garden.',
+      owner: ['6784d64b844f23ac9810cf21'],
       members: [
         { _id: '6784d64b844f23ac9810cf21' },
         { _id: '6784d64b844f23ac9810cf22' },
@@ -232,6 +233,7 @@ describe('PUT /groups/:group_id', () => {
       _id: '6784d715844f23ac9810cf28',
       name: 'Gardens',
       description: 'A club for anyone who gardens in their garden.',
+      owner: ['6784d64b844f23ac9810cf21'],
       members: [
         '6784d64b844f23ac9810cf21',
         '6784d64b844f23ac9810cf22',
@@ -376,16 +378,16 @@ describe('DELETE /lists/:listId', () => {
   test('204: deletes list by listId', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
 
-    const response = await request(app.callback())
-      .delete(`/lists/${listId}`);
+    const response = await request(app.callback()).delete(`/lists/${listId}`);
 
     expect(response.status).toBe(204);
   });
   test('404: responds with an error message for invalid listId', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback())
-      .delete(`/lists/${invalidId}`);
+    const response = await request(app.callback()).delete(
+      `/lists/${invalidId}`
+    );
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('List Not Found');
