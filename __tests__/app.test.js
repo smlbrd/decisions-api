@@ -164,7 +164,6 @@ describe('POST /groups', () => {
 describe('GET /lists/:listId', () => {
   test('200: responds with a list for corresponding list ID', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
-
     await request(app.callback())
       .get(`/lists/${listId}`)
       .expect(200)
@@ -175,14 +174,13 @@ describe('GET /lists/:listId', () => {
           'A list for organizing weekly standup meetings'
         );
         expect(body.options.length).toBe(2);
-        expect(body.options[0]).toBe('6784d7b5844f23ac9810cf31');
-        expect(body.options[1]).toBe('6784d7b5844f23ac9810cf32');
+        expect(typeof body.options[0].name).toBe('string');
+        expect(typeof body.options[1].name).toBe('string');
         expect(body.owner).toBe('6784d64b844f23ac9810cf21');
       });
   });
   test('404: responds with error if cannot match list ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
-
     await request(app.callback())
       .get(`/lists/${invalidId}`)
       .expect(404)
@@ -346,7 +344,6 @@ describe('PUT /users/:userId', () => {
   });
 });
 
-
 describe('POST: /decisions', () => {
   test('201: successfully posts a voting process and responds with the newly posted voting process ', async () => {
     const testDecision = {
@@ -403,7 +400,6 @@ describe('POST: /decisions', () => {
     );
   });
 });
-
 
 describe('PUT /lists/:listId', () => {
   test('200: responds with updated list information for corresponding list ID', async () => {
@@ -466,4 +462,3 @@ describe('DELETE /lists/:listId', () => {
     expect(response.body.error).toBe('List Not Found');
   });
 });
-
