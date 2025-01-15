@@ -46,5 +46,6 @@ route.delete('/groups/:groupId', groupController.deleteGroupById);
 route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);
 route.post('/lists', listController.postList);
+route.delete('/lists/:listId', listController.deleteListById);
 
 module.exports = app;

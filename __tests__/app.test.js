@@ -372,3 +372,22 @@ describe('PUT /lists/:listId', () => {
     expect(response.body.error).toBe('List not found');
   });
 });
+describe('DELETE /lists/:listId', () => {
+  test('204: deletes list by listId', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback())
+      .delete(`/lists/${listId}`);
+
+    expect(response.status).toBe(204);
+  });
+  test('404: responds with an error message for invalid listId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback())
+      .delete(`/lists/${invalidId}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List Not Found');
+  });
+});
