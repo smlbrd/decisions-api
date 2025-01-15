@@ -8,6 +8,7 @@ const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
+const Option = require('../models/options.model');
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -164,7 +165,6 @@ describe('POST /groups', () => {
 describe('GET /lists/:listId', () => {
   test('200: responds with a list for corresponding list ID', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
-
     await request(app.callback())
       .get(`/lists/${listId}`)
       .expect(200)
@@ -175,14 +175,13 @@ describe('GET /lists/:listId', () => {
           'A list for organizing weekly standup meetings'
         );
         expect(body.options.length).toBe(2);
-        expect(body.options[0]).toBe('6784d7b5844f23ac9810cf31');
-        expect(body.options[1]).toBe('6784d7b5844f23ac9810cf32');
+        expect(typeof body.options[0].name).toBe('string');
+        expect(typeof body.options[1].name).toBe('string');
         expect(body.owner).toBe('6784d64b844f23ac9810cf21');
       });
   });
   test('404: responds with error if cannot match list ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
-
     await request(app.callback())
       .get(`/lists/${invalidId}`)
       .expect(404)
@@ -490,5 +489,79 @@ describe('POST /users', () => {
         createdAt: expect.any(String),
       })
     );
+  });
+});
+
+describe('POST /lists/:listId/options', () => {
+  test('200: responds with modified list with option addedclear', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+    const testOption = {
+      name: "Alex option 6",
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(200);
+    expect(response.body.options.length).toBe(3);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        title: 'Weekly Standup',
+        description: 'A list for organizing weekly standup meetings',
+        owner: '6784d64b844f23ac9810cf21',
+        createdAt: expect.any(String),
+        _id: expect.any(String),
+        __v: 0,
+      })
+    );
+
+  });
+  test('404: responds with 404 error if invalid ListId', async () => {
+    const listId = '00000a00000b00000c00000d';
+    const testOption = {
+      name: "Alex option 6",
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List Not Found');
+
+  });
+});
+
+describe('DELETE /lists/:listId/options/:optionId', () => {
+  test('204: deletes option by optionId', async () => {
+    const optionId = '6784d7b5844f23ac9810cf31';
+
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback()).delete(
+      `/lists/${listId}/options/${optionId}`
+    );
+
+    expect(response.status).toBe(204);
+
+    const deletedOption = await Option.findById(optionId);
+    expect(deletedOption).toBeNull();
+  });
+  test('404: responds with error message for invalid optionId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback()).delete(
+      `/lists/${listId}/options/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Option Not Found');
   });
 });
