@@ -206,7 +206,6 @@ describe('POST /lists', () => {
     const response = await request(app.callback())
       .post('/lists')
       .send(testList);
-    console.log(response.body);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(

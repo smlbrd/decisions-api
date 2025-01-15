@@ -1,7 +1,4 @@
 {
-
-  
-
   "API": {
     "GET /": {
       "description": "health check indicating if the server is online"
@@ -206,7 +203,7 @@
   },
 
   "DECISIONS": {
-      "POST /decisions": {
+    "POST /decisions": {
       "description": "posts a voting process and responds with the newly posted voting process",
       "notes": "Need to think about how this will update with each round of voting",
       "queries": [],
@@ -239,5 +236,4 @@
   },
 
   "HISTORY": {}
-
 }
