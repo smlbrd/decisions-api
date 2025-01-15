@@ -21,6 +21,21 @@
         "__v": "0"
       }
     },
+    "POST /users": {
+      "description": "posts a new user and returns that new user",
+      "queries": [],
+      "requiredFields": ["username", "name", "email"],
+      "defaultedFields": ["_id", "__v", "createdAt"],
+      "exampleResponse": {
+        "username": "huge_hippo",
+        "name": "Hugo Hippo",
+        "email": "hugohipster@testmail.com",
+        "savedLists": [],
+        "_id": "6784d64b844f23ac9810cf27",
+        "createdAt": "2025-01-15T16:29:55.536Z",
+        "__v": 0
+      }
+    },
     "PUT /users/:user_id": {
       "description": "edits a user by id and responds with the updated user",
       "queries": [],
