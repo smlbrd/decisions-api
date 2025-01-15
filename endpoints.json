@@ -21,7 +21,6 @@
         "__v": "0"
       }
     },
-
     "PUT /users/:user_id": {
       "description": "edits a user by id and responds with the updated user",
       "queries": [],
@@ -109,7 +108,6 @@
         "__v": 0
       }
     },
-
     "PUT /groups/:group_id": {
       "description": "edits a group by id and responds with the updated group",
       "queries": [],
@@ -136,7 +134,6 @@
         "__v": 0
       }
     },
-
     "DELETE /groups/:group_id": {
       "description": "deletes a group by id"
     }
