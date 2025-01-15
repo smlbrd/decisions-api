@@ -233,6 +233,28 @@
         "__v": 0
       }
     },
+    "PUT /lists/:listId": {
+      "description": "edits a list by id and responds with the updated list",
+      "queries": [],
+      "allowedFields": ["title", "description", "options", "owner", "members"],
+      "exampleBody": {
+        "title": "Weekly Standup Test",
+        "description": "A test list update",
+        "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"]
+      },
+      "exampleResponse": {
+        "_id": "6784d7a5844f23ac9810cf30",
+        "title": "Weekly Standup Test",
+        "description": "A test list update",
+        "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+        "createdAt": "2025-01-15T17:44:57.763Z",
+        "__v": 0
+      }
+    },
     "DELETE /lists/:listId/options/:optionId": {
       "description": "deletes an option given list id and option id"
     },
