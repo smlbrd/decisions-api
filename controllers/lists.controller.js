@@ -6,7 +6,7 @@ const controller = {
     const listId = ctx.params.listId;
 
     try {
-      const list = await List.findById({ _id: listId });
+      const list = await List.findById({ _id: listId }).populate('options');
 
       if (!list) {
         ctx.status = 404;

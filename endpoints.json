@@ -1,5 +1,258 @@
 {
-  "GET /api": {
-    "description": "serves a .json representation of available api endpoints"
-  }
+  "API": {
+    "GET /": {
+      "description": "health check indicating if the server is online"
+    },
+    "GET /api": {
+      "description": "serves a .json representation of available api endpoints"
+    }
+  },
+
+  "USERS": {
+    "GET /users/:userId": {
+      "description": "serves a user object containing user information",
+      "queries": [],
+      "exampleResponse": {
+        "_id": "'6784d64b844f23ac9810cf21'",
+        "username": "'sparkle_unicorn'",
+        "name": "'Sparkle Unicorn'",
+        "email": "'sparkle@testmail.com'",
+        "createdAt": "2025-01-01",
+        "__v": "0"
+      }
+    },
+    "PUT /users/:user_id": {
+      "description": "edits a user by id and responds with the updated user",
+      "queries": [],
+      "allowedFields": ["username", "name", "email", "bio"],
+      "exampleBody": {
+        "username": "sparkle_unicorn 10",
+        "name": "No more unicorns",
+        "email": "sparkles@testmail.com"
+      },
+      "exampleResponse": {
+        "_id": "6784d64b844f23ac9810cf21",
+        "username": "sparkle_unicorn 10",
+        "name": "No more unicorns",
+        "email": "sparkles@testmail.com",
+        "savedLists": ["6784d7a5844f23ac9810cf30"],
+        "createdAt": "2025-01-15T14:31:18.210Z",
+        "__v": 0
+      }
+    }
+  },
+
+  "GROUPS": {
+    "GET /groups/:groupId": {
+      "note": "'not currently of use'"
+    },
+    "GET /groups/:groupId/members": {
+      "description": "serves all populated members of a group by group id",
+      "queries": [],
+      "exampleResponse": [
+        {
+          "_id": "6784d64b844f23ac9810cf21",
+          "username": "sparkle_unicorn",
+          "name": "Sparkle Unicorn",
+          "email": "sparkle@testmail.com",
+          "savedLists": ["6784d7a5844f23ac9810cf30"],
+          "createdAt": "2025-01-15T14:01:54.251Z",
+          "__v": 0
+        },
+        {
+          "_id": "6784d64b844f23ac9810cf22",
+          "username": "pixel_penguin",
+          "name": "Pixel Penguin",
+          "email": "pixel@testmail.com",
+          "savedLists": ["6784d7a5844f23ac9810cf30"],
+          "createdAt": "2025-01-15T14:01:54.251Z",
+          "__v": 0
+        },
+        {
+          "_id": "6784d64b844f23ac9810cf23",
+          "username": "cosmic_koala",
+          "name": "Cosmic Koala",
+          "email": "cosmic@testmail.com",
+          "savedLists": ["6784d7a5844f23ac9810cf30"],
+          "createdAt": "2025-01-15T14:01:54.251Z",
+          "__v": 0
+        }
+      ]
+    },
+
+    "POST /groups": {
+      "description": "allows posting of a new group and returns it",
+      "queries": [],
+      "requiredFields": ["name", "description", "members"],
+      "defaultedFields": ["_id", "__v", "createdAt"],
+      "exampleBody": {
+        "_id": "6784d715844f23ac90876222",
+        "name": "good_gardeners",
+        "description": "A group for good gardening",
+        "members": [
+          { "_id": "6784d64b844f23ac9810cf24" },
+          { "_id": "6784d64b844f23ac9810cf25" },
+          { "_id": "6784d64b844f23ac9810cf26" }
+        ]
+      },
+      "exampleResponse": {
+        "name": "good_gardeners",
+        "description": "A group for good gardening",
+        "members": [
+          "6784d64b844f23ac9810cf24",
+          "6784d64b844f23ac9810cf25",
+          "6784d64b844f23ac9810cf26"
+        ],
+        "createdAt": "2025-01-15T14:04:51.092Z",
+        "_id": "6784d715844f23ac90876222",
+        "__v": 0
+      }
+    },
+    "PUT /groups/:group_id": {
+      "description": "edits a group by id and responds with the updated group",
+      "queries": [],
+      "allowedFields": ["name", "description", "members"],
+      "exampleBody": {
+        "name": "Gardens",
+        "description": "A club for anyone who gardens in their garden.",
+        "members": [
+          { "_id": "6784d64b844f23ac9810cf21" },
+          { "_id": "6784d64b844f23ac9810cf22" },
+          { "_id": "6784d64b844f23ac9810cf23" }
+        ]
+      },
+      "exampleResponse": {
+        "_id": "6784d715844f23ac9810cf28",
+        "name": "Gardens",
+        "description": "A club for anyone who gardens in their garden.",
+        "members": [
+          "6784d64b844f23ac9810cf21",
+          "6784d64b844f23ac9810cf22",
+          "6784d64b844f23ac9810cf23"
+        ],
+        "createdAt": "2025-01-15T14:27:13.741Z",
+        "__v": 0
+      }
+    },
+    "DELETE /groups/:group_id": {
+      "description": "deletes a group by id"
+    }
+  },
+
+  "LISTS": {
+    "GET /users/:userId/saved_lists": {
+      "description": "serves all populated lists that a specific user has saved",
+      "queries": [],
+      "exampleResponse": [
+        {
+          "_id": "6784d7a5844f23ac9810cf30",
+          "title": "Weekly Standup",
+          "description": "A list for organizing weekly standup meetings",
+          "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+          "owner": "6784d64b844f23ac9810cf21",
+          "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+          "createdAt": "2025-01-15T13:49:26.127Z",
+          "__v": 0
+        }
+      ]
+    },
+    "POST /lists": {
+      "description": "allows posting of a new list and returns it",
+      "queries": [],
+      "requiredFields": [
+        "title",
+        "description",
+        "options (at least one element)",
+        "owner"
+      ],
+      "defaultedFields": ["_id", "members", "createdAt", "__v"],
+      "exampleBody": {
+        "_id": "6784d7a5844f23ac9810ca45",
+        "title": "Gardening",
+        "description": "A list of the best new gardening tools",
+        "options": ["6784d7b5844f23ac9810cf34", "6784d7b5844f23ac9810cf35"],
+        "owner": "6784d64b844f23ac9810cf24",
+        "members": ["6784d64b844f23ac9810cf25", "6784d64b844f23ac9810cf26"]
+      },
+      "exampleResponse": {
+        "title": "Gardening",
+        "description": "A list of the best new gardening tools",
+        "options": ["6784d7b5844f23ac9810cf34", "6784d7b5844f23ac9810cf35"],
+        "owner": "6784d64b844f23ac9810cf24",
+        "members": ["6784d64b844f23ac9810cf25", "6784d64b844f23ac9810cf26"],
+        "createdAt": "2025-01-15T14:23:44.461Z",
+        "_id": "6784d7a5844f23ac9810ca45",
+        "__v": 0
+      }
+    },
+    "GET /lists/:listId": {
+      "description": "get list information by id with populated options",
+      "notes": "it might be a good idea to populate all the options here",
+      "queries": [],
+      "exampleResponse": {
+        "_id": "6784d7a5844f23ac9810cf30",
+        "title": "Weekly Standup",
+        "description": "A list for organizing weekly standup meetings",
+        "options": [
+          {
+            "_id": "6784d7b5844f23ac9810cf31",
+            "name": "Daily Updates",
+            "description": "Brief updates from each team member",
+            "customFields": ["time investment: 15 mins", "mood: positive"],
+            "owner": "6784d7a5844f23ac9810cf30",
+            "createdAt": "2025-01-15T16:09:17.619Z",
+            "__v": 0
+          },
+          {
+            "_id": "6784d7b5844f23ac9810cf32",
+            "name": "Action Items",
+            "description": "List of action items to follow up on",
+            "customFields": ["time investment: 30 mins", "mood: focused"],
+            "owner": "6784d7a5844f23ac9810cf30",
+            "createdAt": "2025-01-15T16:09:17.619Z",
+            "__v": 0
+          }
+        ],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+        "createdAt": "2025-01-15T16:09:17.594Z",
+        "__v": 0
+      }
+    }
+  },
+
+  "DECISIONS": {
+    "POST /decisions": {
+      "description": "posts a voting process and responds with the newly posted voting process",
+      "notes": "Need to think about how this will update with each round of voting",
+      "queries": [],
+      "exampleResponse": {
+        "_id": "6784d7c5844f23ac9810cf38",
+        "list": "6784d7a5844f23ac9810cf33",
+        "group": "6784d715844f23ac9810cf28",
+        "votes": [
+          {
+            "user": "6784d64b844f23ac9810cf24",
+            "option": "6784d7b5844f23ac9810cf34",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf25",
+            "option": "6784d7b5844f23ac9810cf35",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf26",
+            "option": "6784d7b5844f23ac9810cf34",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          }
+        ],
+        "votingStatus": "open",
+        "__v": 0,
+        "createdAt": "2025-01-15T15:02:19.886Z"
+      }
+    }
+  },
+
+  "HISTORY": {}
 }
