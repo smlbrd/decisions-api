@@ -1,4 +1,7 @@
 {
+
+  
+
   "API": {
     "GET /": {
       "description": "health check indicating if the server is online"
@@ -202,7 +205,39 @@
     }
   },
 
-  "DECISIONS": {},
+  "DECISIONS": {
+      "POST /decisions": {
+      "description": "posts a voting process and responds with the newly posted voting process",
+      "notes": "Need to think about how this will update with each round of voting",
+      "queries": [],
+      "exampleResponse": {
+        "_id": "6784d7c5844f23ac9810cf38",
+        "list": "6784d7a5844f23ac9810cf33",
+        "group": "6784d715844f23ac9810cf28",
+        "votes": [
+          {
+            "user": "6784d64b844f23ac9810cf24",
+            "option": "6784d7b5844f23ac9810cf34",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf25",
+            "option": "6784d7b5844f23ac9810cf35",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf26",
+            "option": "6784d7b5844f23ac9810cf34",
+            "createdAt": "2025-01-15T15:02:19.886Z"
+          }
+        ],
+        "votingStatus": "open",
+        "__v": 0,
+        "createdAt": "2025-01-15T15:02:19.886Z"
+      }
+    }
+  },
 
   "HISTORY": {}
+
 }
