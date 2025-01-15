@@ -8,6 +8,7 @@ const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
+const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
 
@@ -28,6 +29,18 @@ describe('GET /', () => {
     const response = await request(app.callback()).get('/');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Server online!');
+  });
+});
+
+describe('GET /api', () => {
+  test('200: serves the endpoints.json file', async () => {
+    const endpoints = await fs.readFile(
+      `${__dirname}/../endpoints.json`,
+      'UTF8'
+    );
+    const response = await request(app.callback()).get('/api');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(JSON.parse(endpoints));
   });
 });
 
@@ -217,6 +230,7 @@ describe('PUT /groups/:group_id', () => {
     const newDescription = {
       name: 'Gardens',
       description: 'A club for anyone who gardens in their garden.',
+      owner: ['6784d64b844f23ac9810cf21'],
       members: [
         { _id: '6784d64b844f23ac9810cf21' },
         { _id: '6784d64b844f23ac9810cf22' },
@@ -233,6 +247,7 @@ describe('PUT /groups/:group_id', () => {
       _id: '6784d715844f23ac9810cf28',
       name: 'Gardens',
       description: 'A club for anyone who gardens in their garden.',
+      owner: ['6784d64b844f23ac9810cf21'],
       members: [
         '6784d64b844f23ac9810cf21',
         '6784d64b844f23ac9810cf22',
@@ -332,6 +347,7 @@ describe('PUT /users/:userId', () => {
   });
 });
 
+
 describe('POST: /decisions', () => {
   test('201: successfully posts a voting process and responds with the newly posted voting process ', async () => {
     const testDecision = {
@@ -386,6 +402,69 @@ describe('POST: /decisions', () => {
         createdAt: expect.any(String),
       })
     );
+  });
+});
+
+
+describe('PUT /lists/:listId', () => {
+  test('200: responds with updated list information for corresponding list ID', async () => {
+    const testId = '6784d7a5844f23ac9810cf30';
+    const listUpdate = {
+      title: 'Weekly Standup Test',
+      description: 'A test list update',
+      options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+      owner: '6784d64b844f23ac9810cf21',
+      members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${testId}`)
+      .send(listUpdate);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d7a5844f23ac9810cf30',
+        title: 'Weekly Standup Test',
+        description: 'A test list update',
+        options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+        owner: '6784d64b844f23ac9810cf21',
+        members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot match user ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const listUpdate = {
+      title: 'Weekly Standup Test',
+      description: 'A test list update',
+      options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
+      owner: '6784d64b844f23ac9810cf21',
+      members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${invalidId}`)
+      .send(listUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List not found');
+  });
+});
+describe('DELETE /lists/:listId', () => {
+  test('204: deletes list by listId', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback()).delete(`/lists/${listId}`);
+
+    expect(response.status).toBe(204);
+  });
+  test('404: responds with an error message for invalid listId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).delete(
+      `/lists/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List Not Found');
   });
 });
 
