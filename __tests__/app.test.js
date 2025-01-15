@@ -464,6 +464,34 @@ describe('DELETE /lists/:listId', () => {
   });
 });
 
+describe('POST /users', () => {
+  test('201: posts a new user and returns that new user', async () => {
+    const testUser = {
+      _id: '6784d64b844f23ac9810cf27',
+      username: 'huge_hippo',
+      name: 'Hugo Hippo',
+      email: 'hugohipster@testmail.com',
+    };
+
+    const response = await request(app.callback())
+      .post('/users')
+      .send(testUser);
+    
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d64b844f23ac9810cf27',
+        username: 'huge_hippo',
+        name: 'Hugo Hippo',
+        email: 'hugohipster@testmail.com',
+        savedLists: [],
+        __v: 0,
+        createdAt: expect.any(String),
+      })
+    );
+  });
+});
+
 describe('POST /lists/:listId/options', () => {
   test('200: responds with modified list with option addedclear', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
@@ -537,4 +565,3 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
     expect(response.body.error).toBe('Option Not Found');
   });
 });
-
