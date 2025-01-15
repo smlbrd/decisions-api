@@ -2,6 +2,9 @@
   "API": {
     "GET /": {
       "description": "health check indicating if the server is online"
+    },
+    "GET /api": {
+      "description": "serves a .json representation of available api endpoints"
     }
   },
 
