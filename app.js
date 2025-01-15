@@ -47,5 +47,6 @@ route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);
 route.post('/lists', listController.postList);
 route.delete('/lists/:listId', listController.deleteListById);
+route.post('/lists/:listId/options', listController.addItemToList);
 
 module.exports = app;

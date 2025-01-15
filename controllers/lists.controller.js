@@ -1,4 +1,5 @@
 const List = require("../models/lists.model");
+const Option = require('../models/options.model');
 
 const controller = {
   getListByListId: async (ctx) => {
@@ -64,6 +65,24 @@ const controller = {
     } catch (err) {
       ctx.status = 500;
       ctx.body = { error: "Internal server error" };
+    }
+  },
+  addItemToList: async (ctx) => {
+    const listId = ctx.params.listId;
+    const optionInput = ctx.request.body
+
+    try {
+      optionInput.owner = listId;
+
+      const newOption = new Option(optionInput);
+      const savedOption = await newOption.save();
+      console.log('New Option created: ', savedOption)
+
+      // Now need to update List with Option ID
+
+    }
+    catch (err) {
+      console.log('Error: ', err)
     }
   }
 };

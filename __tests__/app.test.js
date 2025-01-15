@@ -391,3 +391,31 @@ describe('DELETE /lists/:listId', () => {
     expect(response.body.error).toBe('List Not Found');
   });
 });
+describe('POST /lists/:listId/options', () => {
+  test.only('201: responds with modified list with option addedclear', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+    const testOption = {
+      name: "Alex option 3",
+      description: 'Alex option for this list2',
+      customFields: ['time investment: 320 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        title: 'Gardening',
+        description: 'A list of the best new gardening tools',
+        options: ['6784d7b5844f23ac9810cf34', '6784d7b5844f23ac9810cf35'],
+        owner: '6784d64b844f23ac9810cf24',
+        members: ['6784d64b844f23ac9810cf25', '6784d64b844f23ac9810cf26'],
+        createdAt: expect.any(String),
+        _id: '6784d7a5844f23ac9810ca45',
+        __v: 0,
+      })
+    );
+  });
+});
