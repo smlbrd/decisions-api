@@ -36,13 +36,15 @@ route.get('/', (ctx) => {
 route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);
-route.get('/lists/:listId', listController.getListByListId);
+
 route.get('/groups/:groupId', groupController.getGroupById);
+route.put('/groups/:groupId', groupController.editGroupById);
 route.get('/groups/:groupId/members', groupController.getMembersByGroupId);
 route.post('/groups', groupController.postGroup);
-route.post('/lists', listController.postList);
-route.put("/groups/:groupId", groupController.editGroupById)
-route.put('/users/:userId', userController.updateUserById);
+route.delete('/groups/:groupId', groupController.deleteGroupById);
+
+route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);
+route.post('/lists', listController.postList);
 
 module.exports = app;
