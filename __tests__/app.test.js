@@ -8,6 +8,7 @@ const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
+const Option = require('../models/options.model');
 
 const uri = process.env.DATABASE_URI;
 
@@ -391,5 +392,33 @@ describe('DELETE /lists/:listId', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('List Not Found');
+  });
+});
+describe('DELETE /lists/:listId/options/:optionId', () => {
+  test('204: deletes option by optionId', async () => {
+    const optionId = '6784d7b5844f23ac9810cf31';
+
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback()).delete(
+      `/lists/${listId}/options/${optionId}`
+    );
+
+    expect(response.status).toBe(204);
+
+    const deletedOption = await Option.findById(optionId);
+    expect(deletedOption).toBeNull();
+  });
+  test('404: responds with error message for invalid optionId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const response = await request(app.callback()).delete(
+      `/lists/${listId}/options/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Option Not Found');
   });
 });
