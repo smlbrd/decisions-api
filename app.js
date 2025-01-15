@@ -5,6 +5,7 @@ const Router = require('koa-router');
 const userController = require('./controllers/users.controller');
 const listController = require('./controllers/lists.controller');
 const groupController = require('./controllers/groups.controller');
+const decisionController = require("./controllers/decisions.controller")
 const route = new Router();
 const bodyParser = require('koa-bodyparser');
 
@@ -44,5 +45,6 @@ route.post('/lists', listController.postList);
 route.put('/groups/:groupId', groupController.editGroupById);
 route.put('/users/:userId', userController.updateUserById);
 route.delete('/groups/:groupId', groupController.deleteGroupById);
+route.post('/decisions', decisionController.postDecision);
 
 module.exports = app;

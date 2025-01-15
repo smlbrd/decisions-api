@@ -193,6 +193,7 @@ describe('POST /lists', () => {
     const response = await request(app.callback())
       .post('/lists')
       .send(testList);
+    console.log(response.body);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
@@ -330,3 +331,61 @@ describe('PUT /users/:userId', () => {
     expect(response.body.error).toBe('User not found');
   });
 });
+
+describe('POST: /decisions', () => {
+  test('201: successfully posts a voting process and responds with the newly posted voting process ', async () => {
+    const testDecision = {
+      _id: '6784d7c5844f23ac9810cf38',
+      list: '6784d7a5844f23ac9810cf33',
+      group: '6784d715844f23ac9810cf28',
+      votes: [
+        {
+          user: '6784d64b844f23ac9810cf24',
+          option: '6784d7b5844f23ac9810cf34',
+        },
+        {
+          user: '6784d64b844f23ac9810cf25',
+          option: '6784d7b5844f23ac9810cf35',
+        },
+        {
+          user: '6784d64b844f23ac9810cf26',
+          option: '6784d7b5844f23ac9810cf34',
+        },
+      ],
+      votingStatus: 'open',
+    };
+
+    const response = await request(app.callback())
+      .post('/decisions')
+      .send(testDecision);
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d7c5844f23ac9810cf38',
+        list: '6784d7a5844f23ac9810cf33',
+        group: '6784d715844f23ac9810cf28',
+        votes: [
+          expect.objectContaining({
+            user: '6784d64b844f23ac9810cf24',
+            option: '6784d7b5844f23ac9810cf34',
+            createdAt: expect.any(String),
+          }),
+          expect.objectContaining({
+            user: '6784d64b844f23ac9810cf25',
+            option: '6784d7b5844f23ac9810cf35',
+            createdAt: expect.any(String),
+          }),
+          expect.objectContaining({
+            user: '6784d64b844f23ac9810cf26',
+            option: '6784d7b5844f23ac9810cf34',
+            createdAt: expect.any(String),
+          }),
+        ],
+        votingStatus: 'open',
+        __v: 0,
+        createdAt: expect.any(String),
+      })
+    );
+  });
+});
+
