@@ -79,7 +79,6 @@
         }
       ]
     },
-
     "POST /groups": {
       "description": "allows posting of a new group and returns it",
       "queries": [],
@@ -218,6 +217,9 @@
         "createdAt": "2025-01-15T16:09:17.594Z",
         "__v": 0
       }
+    },
+    "DELETE /lists/:listId/options/:optionId": {
+      "description": "deletes an option given list id and option id"
     }
   },
 
