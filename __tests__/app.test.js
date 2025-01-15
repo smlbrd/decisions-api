@@ -372,7 +372,7 @@ describe('PUT /lists/:listId', () => {
     expect(response.body.error).toBe('List not found');
   });
 });
-describe.skip('DELETE /lists/:listId', () => {
+describe('DELETE /lists/:listId', () => {
   test('204: deletes list by listId', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
 
