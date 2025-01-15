@@ -5,6 +5,7 @@ const Router = require('koa-router');
 const userController = require('./controllers/users.controller');
 const listController = require('./controllers/lists.controller');
 const groupController = require('./controllers/groups.controller');
+const apiController = require('./controllers/api.controller');
 const route = new Router();
 const bodyParser = require('koa-bodyparser');
 
@@ -33,6 +34,7 @@ route.get('/', (ctx) => {
   ctx.body = 'Server online!';
 });
 
+route.get('/api', apiController.getEndpoints);
 route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);

@@ -8,6 +8,7 @@ const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
+const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
 
@@ -28,6 +29,18 @@ describe('GET /', () => {
     const response = await request(app.callback()).get('/');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Server online!');
+  });
+});
+
+describe('GET /api', () => {
+  test('200: serves the endpoints.json file', async () => {
+    const endpoints = await fs.readFile(
+      `${__dirname}/../endpoints.json`,
+      'UTF8'
+    );
+    const response = await request(app.callback()).get('/api');
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(JSON.parse(endpoints));
   });
 });
 
