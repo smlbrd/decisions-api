@@ -186,17 +186,36 @@
       }
     },
     "GET /lists/:listId": {
-      "description": "get list information by id",
+      "description": "get list information by id with populated options",
       "notes": "it might be a good idea to populate all the options here",
       "queries": [],
       "exampleResponse": {
         "_id": "6784d7a5844f23ac9810cf30",
         "title": "Weekly Standup",
         "description": "A list for organizing weekly standup meetings",
-        "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+        "options": [
+          {
+            "_id": "6784d7b5844f23ac9810cf31",
+            "name": "Daily Updates",
+            "description": "Brief updates from each team member",
+            "customFields": ["time investment: 15 mins", "mood: positive"],
+            "owner": "6784d7a5844f23ac9810cf30",
+            "createdAt": "2025-01-15T16:09:17.619Z",
+            "__v": 0
+          },
+          {
+            "_id": "6784d7b5844f23ac9810cf32",
+            "name": "Action Items",
+            "description": "List of action items to follow up on",
+            "customFields": ["time investment: 30 mins", "mood: focused"],
+            "owner": "6784d7a5844f23ac9810cf30",
+            "createdAt": "2025-01-15T16:09:17.619Z",
+            "__v": 0
+          }
+        ],
         "owner": "6784d64b844f23ac9810cf21",
         "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
-        "createdAt": "2025-01-15T14:15:21.388Z",
+        "createdAt": "2025-01-15T16:09:17.594Z",
         "__v": 0
       }
     }

@@ -168,7 +168,6 @@ describe('GET /lists/:listId', () => {
       .get(`/lists/${listId}`)
       .expect(200)
       .then(({ body }) => {
-        console.log(body)
         expect(body._id).toBe('6784d7a5844f23ac9810cf30');
         expect(body.title).toBe('Weekly Standup');
         expect(body.description).toBe(
@@ -345,7 +344,6 @@ describe('PUT /users/:userId', () => {
   });
 });
 
-
 describe('POST: /decisions', () => {
   test('201: successfully posts a voting process and responds with the newly posted voting process ', async () => {
     const testDecision = {
@@ -402,7 +400,6 @@ describe('POST: /decisions', () => {
     );
   });
 });
-
 
 describe('PUT /lists/:listId', () => {
   test('200: responds with updated list information for corresponding list ID', async () => {
@@ -465,4 +462,3 @@ describe('DELETE /lists/:listId', () => {
     expect(response.body.error).toBe('List Not Found');
   });
 });
-
