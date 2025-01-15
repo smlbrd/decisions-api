@@ -35,17 +35,31 @@ const controller = {
   updateListById: async (ctx) => {
     const listId = ctx.params.listId;
     const listInput = ctx.request.body;
-    console.log('List ID: ', listId, ' List Input: ', listInput)
+
     try {
       const updatedList = await List.findByIdAndUpdate(listId, listInput, { new: true });
       if (!updatedList) {
         ctx.status = 404;
         ctx.body = { error: 'List not found' };
-        console.log('Error')
       } else {
         ctx.status = 200;
         ctx.body = updatedList;
-        console.log('Success!!!')
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: "Internal server error" };
+    }
+  },
+  deleteListById: async (ctx) => {
+    const listId = ctx.params.listId
+    try {
+      const list = await List.findOneAndDelete({ _id: listId });
+
+      if (!list) {
+        ctx.status = 404;
+        ctx.body = { error: 'List Not Found' };
+      } else {
+        ctx.status = 204;
       }
     } catch (err) {
       ctx.status = 500;
