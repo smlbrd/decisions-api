@@ -1,7 +1,11 @@
 {
-
-  "GET /api": {
-    "description": "serves a .json representation of available api endpoints"
+  "API": {
+    "GET /": {
+      "description": "health check indicating if the server is online"
+    },
+    "GET /api": {
+      "description": "serves a .json representation of available api endpoints"
+    }
   },
 
   "USERS": {
@@ -190,13 +194,6 @@
         "description": "A list for organizing weekly standup meetings",
         "options": [
           {
-            "_id": "6784d7b5844f23ac9810cf31"
-          },
-          {
-            "_id": "6784d7b5844f23ac9810cf32"
-          },
-          {
-            "_id": "6784d7b5844f23ac9810cf33"
             "_id": "6784d7b5844f23ac9810cf31",
             "name": "Daily Updates",
             "description": "Brief updates from each team member",
@@ -220,30 +217,40 @@
         "createdAt": "2025-01-15T16:09:17.594Z",
         "__v": 0
       }
-    }
-  }
     },
     "DELETE /lists/:listId/options/:optionId": {
       "description": "deletes an option given list id and option id"
     },
     "POST /lists/:listId/options": {
-          "description": "adds an option to a specific list and returns the updated list",
-          "queries": [],
-          "requiredFields": ["name", "description", "customFields"],
-          "exampleBody": {
-            "name": "Team Meeting",
-            "description": "A recurring team meeting option",
-            "customFields": ["time: 1 hour", "location: Zoom"]
+      "description": "adds an option to a specific list and returns the updated list",
+      "queries": [],
+      "requiredFields": ["name", "description", "customFields"],
+      "exampleBody": {
+        "name": "Team Meeting",
+        "description": "A recurring team meeting option",
+        "customFields": ["time: 1 hour", "location: Zoom"]
+      },
+      "exampleResponse": {
+        "_id": "6784d7a5844f23ac9810cf30",
+        "title": "Weekly Standup",
+        "description": "A list for organizing weekly standup meetings",
+        "options": [
+          {
+            "_id": "6784d7b5844f23ac9810cf31"
           },
-          "exampleResponse": {
-
-      "API": {
-        "GET /": {
-          "description": "health check indicating if the server is online"
-        },
-        "GET /api": {
-          "description": "serves a .json representation of available api endpoints"
-        }
+          {
+            "_id": "6784d7b5844f23ac9810cf32"
+          },
+          {
+            "_id": "6784d7b5844f23ac9810cf33"
+          }
+        ],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+        "createdAt": "2025-01-15T16:09:17.594Z",
+        "__v": 0
+      }
+    }
   },
 
   "DECISIONS": {
@@ -280,5 +287,4 @@
   },
 
   "HISTORY": {}
-
 }
