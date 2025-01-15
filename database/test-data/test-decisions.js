@@ -2,12 +2,7 @@ module.exports = [
   {
     _id: '6784d7c5844f23ac9810cf36',
     list: '6784d7a5844f23ac9810cf30',
-    options: ['6784d7b5844f23ac9810cf31', '6784d7b5844f23ac9810cf32'],
-    participants: [
-      '6784d64b844f23ac9810cf21',
-      '6784d64b844f23ac9810cf22',
-      '6784d64b844f23ac9810cf23',
-    ],
+    group: "6784d715844f23ac9810cf28",
     votes: [
       {
         user: '6784d64b844f23ac9810cf21',
@@ -27,12 +22,7 @@ module.exports = [
   {
     _id: '6784d7c5844f23ac9810cf37',
     list: '6784d7a5844f23ac9810cf33',
-    options: ['6784d7b5844f23ac9810cf34', '6784d7b5844f23ac9810cf35'],
-    participants: [
-      '6784d64b844f23ac9810cf24',
-      '6784d64b844f23ac9810cf25',
-      '6784d64b844f23ac9810cf26',
-    ],
+    group: "6784d715844f23ac9810cf29",
     votes: [
       {
         user: '6784d64b844f23ac9810cf24',

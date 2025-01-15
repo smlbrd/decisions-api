@@ -1,4 +1,4 @@
-const List = require("../models/lists.model");
+const List = require('../models/lists.model');
 const Option = require('../models/options.model');
 
 const controller = {
@@ -6,11 +6,11 @@ const controller = {
     const listId = ctx.params.listId;
 
     try {
-      const list = await List.findById({ _id: listId });
+      const list = await List.findById({ _id: listId }).populate('options');
 
       if (!list) {
         ctx.status = 404;
-        ctx.body = { error: "No results!" };
+        ctx.body = { error: 'No results!' };
       } else {
         ctx.status = 200;
         ctx.body = list;
@@ -38,7 +38,9 @@ const controller = {
     const listInput = ctx.request.body;
 
     try {
-      const updatedList = await List.findByIdAndUpdate(listId, listInput, { new: true });
+      const updatedList = await List.findByIdAndUpdate(listId, listInput, {
+        new: true,
+      });
       if (!updatedList) {
         ctx.status = 404;
         ctx.body = { error: 'List not found' };
@@ -48,11 +50,11 @@ const controller = {
       }
     } catch (err) {
       ctx.status = 500;
-      ctx.body = { error: "Internal server error" };
+      ctx.body = { error: 'Internal server error' };
     }
   },
   deleteListById: async (ctx) => {
-    const listId = ctx.params.listId
+    const listId = ctx.params.listId;
     try {
       const list = await List.findOneAndDelete({ _id: listId });
 
@@ -64,9 +66,30 @@ const controller = {
       }
     } catch (err) {
       ctx.status = 500;
-      ctx.body = { error: "Internal server error" };
+      ctx.body = { error: 'Internal server error' };
     }
   },
+  deleteOptionById: async (ctx) => {
+    const { listId, optionId } = ctx.params;
+
+    try {
+      const option = await Option.findOneAndDelete({
+        _id: optionId,
+        owner: listId,
+      });
+
+      if (!option) {
+        ctx.status = 404;
+        ctx.body = { error: 'Option Not Found' };
+      } else {
+        ctx.status = 204;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
+
   addItemToList: async (ctx) => {
     const listId = ctx.params.listId;
     const optionInput = ctx.request.body

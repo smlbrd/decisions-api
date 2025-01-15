@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 
 const decisionSchema = new mongoose.Schema({
   list: { type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true },
-  options: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Option' }],
-  participants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User ' }],
+  group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true },
   votes: [
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User ',
+        ref: 'User',
         required: true,
       },
       option: {
