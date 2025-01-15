@@ -1,4 +1,5 @@
 const List = require('../models/lists.model');
+const Option = require('../models/options.model');
 
 const controller = {
   getListByListId: async (ctx) => {
@@ -68,5 +69,26 @@ const controller = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+  deleteOptionById: async (ctx) => {
+    const { listId, optionId } = ctx.params;
+
+    try {
+      const option = await Option.findOneAndDelete({
+        _id: optionId,
+        owner: listId,
+      });
+
+      if (!option) {
+        ctx.status = 404;
+        ctx.body = { error: 'Option Not Found' };
+      } else {
+        ctx.status = 204;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
 };
+
 module.exports = controller;
