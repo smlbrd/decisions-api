@@ -255,6 +255,9 @@
         "__v": 0
       }
     },
+    "DELETE /lists/:listId/": {
+      "description": "deletes a list given a list id"
+    },
     "DELETE /lists/:listId/options/:optionId": {
       "description": "deletes an option given list id and option id"
     },
