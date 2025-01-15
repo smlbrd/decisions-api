@@ -392,30 +392,46 @@ describe('DELETE /lists/:listId', () => {
   });
 });
 describe('POST /lists/:listId/options', () => {
-  test.only('201: responds with modified list with option addedclear', async () => {
+  test('200: responds with modified list with option addedclear', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
     const testOption = {
-      name: "Alex option 3",
-      description: 'Alex option for this list2',
-      customFields: ['time investment: 320 mins', 'mood: relax'],
+      name: "Alex option 6",
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
     };
 
     const response = await request(app.callback())
       .post(`/lists/${listId}/options`)
       .send(testOption);
 
-    expect(response.status).toBe(201);
+    expect(response.status).toBe(200);
+    expect(response.body.options.length).toBe(3);
     expect(response.body).toEqual(
       expect.objectContaining({
-        title: 'Gardening',
-        description: 'A list of the best new gardening tools',
-        options: ['6784d7b5844f23ac9810cf34', '6784d7b5844f23ac9810cf35'],
-        owner: '6784d64b844f23ac9810cf24',
-        members: ['6784d64b844f23ac9810cf25', '6784d64b844f23ac9810cf26'],
+        title: 'Weekly Standup',
+        description: 'A list for organizing weekly standup meetings',
+        owner: '6784d64b844f23ac9810cf21',
         createdAt: expect.any(String),
-        _id: '6784d7a5844f23ac9810ca45',
+        _id: expect.any(String),
         __v: 0,
       })
     );
+
+  });
+  test('404: responds with 404 error if invalid ListId', async () => {
+    const listId = '00000a00000b00000c00000d';
+    const testOption = {
+      name: "Alex option 6",
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List Not Found');
+
   });
 });

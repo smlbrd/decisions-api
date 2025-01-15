@@ -76,14 +76,22 @@ const controller = {
 
       const newOption = new Option(optionInput);
       const savedOption = await newOption.save();
-      console.log('New Option created: ', savedOption)
 
-      // Now need to update List with Option ID
+      const updatedList = await List.findByIdAndUpdate(listId, { $push: { options: savedOption._id } }, { new: true });
 
+      if (!updatedList) {
+        ctx.status = 404;
+        ctx.body = { error: 'List Not Found' };
+      } else {
+        ctx.status = 200;
+        ctx.body = updatedList;
+      }
     }
     catch (err) {
-      console.log('Error: ', err)
+      ctx.status = 500;
+      ctx.body = { error: "Internal server error" };
     }
   }
 };
+
 module.exports = controller;
