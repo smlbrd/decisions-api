@@ -59,7 +59,21 @@ const userController = {
     }
   },
   deleteUser: async (ctx) => {
+    const userId = ctx.params.userId;
+    console.log(userId, '<<< UserID')
+    try {
+      const user = await User.findOneAndDelete({ _id: userId });
 
+      if (!user) {
+        ctx.status = 404;
+        ctx.body = { error: 'User Not Found' };
+      } else {
+        ctx.status = 204;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
   }
 };
 

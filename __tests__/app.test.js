@@ -9,6 +9,7 @@ const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
 const Option = require('../models/options.model');
+const User = require('../models/users.model')
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -565,13 +566,12 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
     expect(response.body.error).toBe('Option Not Found');
   });
 });
-describe.only('DELETE /users/:userId/', () => {
+describe('DELETE /users/:userId/', () => {
   test('204: deletes user by userId', async () => {
-    const userId = '6784d7b5844f23ac9810cf31';
+    const userId = '6784d64b844f23ac9810cf22';
 
-    const response = await request(app.callback()).delete(
-      `/users/${userId}`
-    );
+    const response = await request(app.callback())
+      .delete(`/users/${userId}`);
 
     expect(response.status).toBe(204);
 
