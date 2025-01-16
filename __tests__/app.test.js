@@ -380,9 +380,9 @@ describe('PUT /users/:userId', () => {
 describe('POST: /decisions', () => {
   test('201: successfully posts a voting process and responds with the newly posted voting process ', async () => {
     const testDecision = {
-      _id: '6784d7c5844f23ac9810cf38',
+      _id: '678936353c1e50fdb8f4c0d7',
       list: '6784d7a5844f23ac9810cf33',
-      group: '6784d715844f23ac9810cf28',
+      group: '6784d715844f23ac9810cf29',
       votes: [
         {
           user: '6784d64b844f23ac9810cf24',
@@ -392,43 +392,42 @@ describe('POST: /decisions', () => {
           user: '6784d64b844f23ac9810cf25',
           option: '6784d7b5844f23ac9810cf35',
         },
-        {
-          user: '6784d64b844f23ac9810cf26',
-          option: '6784d7b5844f23ac9810cf34',
-        },
       ],
-      votingStatus: 'open',
+      votingStatus: 'not started',
+      decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+      saveData: {},
+      completedAt: null,
+      outcome: null,
     };
 
     const response = await request(app.callback())
       .post('/decisions')
       .send(testDecision);
+
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
-        _id: '6784d7c5844f23ac9810cf38',
+        _id: '678936353c1e50fdb8f4c0d7',
         list: '6784d7a5844f23ac9810cf33',
-        group: '6784d715844f23ac9810cf28',
+        group: '6784d715844f23ac9810cf29',
         votes: [
-          expect.objectContaining({
+          {
             user: '6784d64b844f23ac9810cf24',
             option: '6784d7b5844f23ac9810cf34',
-            createdAt: expect.any(String),
-          }),
-          expect.objectContaining({
+            _id: expect.any(String),
+          },
+          {
             user: '6784d64b844f23ac9810cf25',
             option: '6784d7b5844f23ac9810cf35',
-            createdAt: expect.any(String),
-          }),
-          expect.objectContaining({
-            user: '6784d64b844f23ac9810cf26',
-            option: '6784d7b5844f23ac9810cf34',
-            createdAt: expect.any(String),
-          }),
+            _id: expect.any(String),
+          },
         ],
-        votingStatus: 'open',
-        __v: 0,
+        votingStatus: 'not started',
+        decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+        outcome: null,
         createdAt: expect.any(String),
+        completedAt: null,
+        __v: 0,
       })
     );
   });
