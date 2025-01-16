@@ -669,7 +669,20 @@ describe('GET /users', () => {
       name: expect.any(String),
       createdAt: expect.any(String),
       __v: expect.any(Number),
-    })
+    });
+  });
+  test('200: can query by username', async () => {
+    const response = await request(app.callback()).get(
+      `/users?username=robo_raptor`
+    );
+    expect(response.status).toBe(200);
+    expect(response.body).toMatchObject({
+      _id: '6784d64b844f23ac9810cf24',
+      username: 'robo_raptor',
+      name: 'Robo Raptor',
+      email: 'robo@testmail.com',
+      savedLists: ['6784d7a5844f23ac9810cf33'],
+    });
   });
 });
 

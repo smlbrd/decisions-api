@@ -15,9 +15,20 @@ const userController = {
     }
   },
   getUsers: async (ctx) => {
-    const users = await User.find();
-    ctx.status = 200;
-    ctx.body = users;
+    try {
+      if (ctx.query.username) {
+        const user = await User.find({ username: ctx.query.username });
+        ctx.status = 200;
+        ctx.body = user[0];
+      } else {
+        const users = await User.find();
+        ctx.status = 200;
+        ctx.body = users;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
   },
   updateUserById: async (ctx) => {
     const userId = ctx.params.userId;
