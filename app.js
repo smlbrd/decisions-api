@@ -1,4 +1,5 @@
 const connectDB = require('./database/database');
+const cors = require('@koa/cors');
 const koa = require('koa');
 const app = new koa();
 const Router = require('koa-router');
@@ -13,6 +14,11 @@ const bodyParser = require('koa-bodyparser');
 
 connectDB();
 
+app.use(
+  cors({
+    origin: 'http://localhost:8081',
+  })
+);
 app.use(bodyParser());
 app.use(route.routes());
 
@@ -40,7 +46,7 @@ route.get('/api', apiController.getEndpoints);
 route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);
-route.post("/users", userController.postNewUser)
+route.post('/users', userController.postNewUser);
 route.delete('/users/:userId', userController.deleteUser);
 route.get('/users', userController.getUsers);
 
