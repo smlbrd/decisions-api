@@ -9,7 +9,6 @@ const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
 const Option = require('../models/options.model');
-const User = require('../models/users.model')
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -477,7 +476,7 @@ describe('POST /users', () => {
     const response = await request(app.callback())
       .post('/users')
       .send(testUser);
-
+    
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -566,6 +565,52 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
     expect(response.body.error).toBe('Option Not Found');
   });
 });
+describe('PUT /lists/:listId/options/:optionId', () => {
+  test('200: updates option by optionId (and ListId) and responds with the updated option', async () => {
+    const optionId = '6784d7b5844f23ac9810cf31';
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const optionUpdate = {
+      name: 'Daily Updates Now With Even More Updates',
+      description:
+        'Brief updates with a side of extra updates from each team member',
+      customFields: ['time investment: 15 mins', 'mood: positive'],
+      owner: '6784d7a5844f23ac9810cf30',
+    };
+
+    const response = await request(app.callback())
+      .put(`/lists/${listId}/options/${optionId}`)
+      .send(optionUpdate);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        name: 'Daily Updates Now With Even More Updates',
+        description:
+          'Brief updates with a side of extra updates from each team member',
+        customFields: ['time investment: 15 mins', 'mood: positive'],
+        owner: '6784d7a5844f23ac9810cf30',
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot find optionId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const listId = '6784d7a5844f23ac9810cf30';
+    const optionUpdate = {
+      name: 'Daily Updates Now With Even More Updates',
+      description:
+        'Brief updates with a side of extra updates from each team member',
+      customFields: ['time investment: 15 mins', 'mood: positive'],
+      owner: '6784d7a5844f23ac9810cf30',
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${listId}/options/${invalidId}`)
+      .send(optionUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Option Not Found');
+  });
+});
+
 describe('DELETE /users/:userId/', () => {
   test('204: deletes user by userId', async () => {
     const userId = '6784d64b844f23ac9810cf22';
