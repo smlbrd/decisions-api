@@ -9,6 +9,8 @@ const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
 const Option = require('../models/options.model');
+const User = require('../models/users.model');
+const Group = require('../models/groups.model');
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -489,5 +491,44 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Option Not Found');
+  });
+});
+
+describe('DELETE /groups/:groupId/users/:userId', () => {
+  test('204: deletes a user by userId from a group specified by groupId ', async () => {
+    const groupId = '6784d715844f23ac9810cf28';
+    const userId = '6784d64b844f23ac9810cf21';
+
+    const response = await request(app.callback()).delete(
+      `/groups/${groupId}/users/${userId}`
+    );
+
+    expect(response.status).toBe(204);
+    const updatedGroup = await Group.findById(groupId);
+    expect(updatedGroup.members.length).toBe(2);
+  });
+
+  test('404: responds with error for when groupId invalid', async () => {
+    const groupId = '00000a00000b00000c00000d';
+    const userId = '6784d64b844f23ac9810cf21';
+
+    const response = await request(app.callback()).delete(
+      `/groups/${groupId}/users/${userId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Group Not Found');
+  });
+
+  test('404: responds with error for when userId invalid', async () => {
+    const groupId = '6784d715844f23ac9810cf28';
+    const userId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).delete(
+      `/groups/${groupId}/users/${userId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('User Not Found');
   });
 });
