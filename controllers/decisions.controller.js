@@ -16,9 +16,11 @@ const decisionController = {
     const decisionId = ctx.params.decisionId;
     try {
       const decision = await Decision.findById({ _id: decisionId });
+      console.log('decision:', decision, 'decisionId:', decisionId);
       if (!decision) {
         ctx.status = 404;
         ctx.body = { error: 'Decision Not Found' };
+        console.log('Error in decision')
       }
       else {
         ctx.status = 200;
