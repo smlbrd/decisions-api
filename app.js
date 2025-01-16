@@ -5,7 +5,7 @@ const Router = require('koa-router');
 const userController = require('./controllers/users.controller');
 const listController = require('./controllers/lists.controller');
 const groupController = require('./controllers/groups.controller');
-const decisionController = require("./controllers/decisions.controller")
+const decisionController = require('./controllers/decisions.controller');
 const apiController = require('./controllers/api.controller');
 
 const route = new Router();
@@ -59,5 +59,6 @@ route.delete(
   '/lists/:listId/options/:optionId',
   listController.deleteOptionById
 );
+route.put('/lists/:listId/options/:optionId', listController.updateOptionById);
 
 module.exports = app;
