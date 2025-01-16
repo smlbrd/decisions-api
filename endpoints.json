@@ -97,7 +97,7 @@
         }
       ]
     },
-    "GET /users/:user_id/users": {
+    "GET /users/:user_id/groups": {
       "description": "serves all groups with a specified user by id, and populates the members",
       "queries": [],
       "exampleResponse": [
