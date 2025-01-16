@@ -638,8 +638,7 @@ describe('DELETE /users/:userId/', () => {
   test('204: deletes user by userId', async () => {
     const userId = '6784d64b844f23ac9810cf22';
 
-    const response = await request(app.callback())
-      .delete(`/users/${userId}`);
+    const response = await request(app.callback()).delete(`/users/${userId}`);
 
     expect(response.status).toBe(204);
 
@@ -655,6 +654,22 @@ describe('DELETE /users/:userId/', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('User Not Found');
+  });
+});
+
+describe('GET /users', () => {
+  test('200: responds with all the users', async () => {
+    const response = await request(app.callback()).get(`/users`);
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(6);
+    expect(response.body[0]).toMatchObject({
+      _id: expect.any(String),
+      username: expect.any(String),
+      savedLists: expect.any(Array),
+      name: expect.any(String),
+      createdAt: expect.any(String),
+      __v: expect.any(Number),
+    })
   });
 });
 

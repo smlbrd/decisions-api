@@ -14,6 +14,11 @@ const userController = {
       ctx.body = user;
     }
   },
+  getUsers: async (ctx) => {
+    const users = await User.find();
+    ctx.status = 200;
+    ctx.body = users;
+  },
   updateUserById: async (ctx) => {
     const userId = ctx.params.userId;
     const userInput = ctx.request.body;
@@ -73,7 +78,7 @@ const userController = {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
-  }
+  },
 };
 
 module.exports = userController;
