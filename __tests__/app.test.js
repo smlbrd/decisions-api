@@ -731,3 +731,32 @@ describe('DELETE /groups/:groupId/users/:userId', () => {
     expect(response.body.error).toBe('User Not Found');
   });
 });
+describe('GET /decisions/:decisionId', () => {
+  test('200: responds with decision for corresponding decision ID', async () => {
+    const decisionId = '6784d7c5844f23ac9810cf36';
+
+    const response = await request(app.callback())
+      .get(`/decisions/${decisionId}`);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d7c5844f23ac9810cf36',
+        list: '6784d7a5844f23ac9810cf30',
+        group: '6784d715844f23ac9810cf28',
+        votingStatus: 'closed',
+        createdAt: expect.any(String),
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot match decision ID', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback())
+      .get(`/decisions/${invalidId}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Decision Not Found');
+  });
+});
