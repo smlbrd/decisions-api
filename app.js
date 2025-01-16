@@ -40,6 +40,8 @@ route.get('/api', apiController.getEndpoints);
 route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);
+route.post("/users", userController.postNewUser)
+route.delete('/users/:userId', userController.deleteUser);
 
 route.get('/groups/:groupId', groupController.getGroupById);
 route.put('/groups/:groupId', groupController.editGroupById);
@@ -50,6 +52,7 @@ route.delete(
   '/groups/:groupId/users/:userId',
   groupController.removeUserByIdFromGroupById
 );
+route.get('/users/:user_id/groups', groupController.getGroupsByUserId);
 
 route.post('/decisions', decisionController.postDecision);
 
@@ -57,9 +60,11 @@ route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);
 route.post('/lists', listController.postList);
 route.delete('/lists/:listId', listController.deleteListById);
+route.post('/lists/:listId/options', listController.addItemToList);
 route.delete(
   '/lists/:listId/options/:optionId',
   listController.deleteOptionById
 );
+route.put('/lists/:listId/options/:optionId', listController.updateOptionById);
 
 module.exports = app;

@@ -21,6 +21,21 @@
         "__v": "0"
       }
     },
+    "POST /users": {
+      "description": "posts a new user and returns that new user",
+      "queries": [],
+      "requiredFields": ["username", "name", "email"],
+      "defaultedFields": ["_id", "__v", "createdAt"],
+      "exampleResponse": {
+        "username": "huge_hippo",
+        "name": "Hugo Hippo",
+        "email": "hugohipster@testmail.com",
+        "savedLists": [],
+        "_id": "6784d64b844f23ac9810cf27",
+        "createdAt": "2025-01-15T16:29:55.536Z",
+        "__v": 0
+      }
+    },
     "PUT /users/:user_id": {
       "description": "edits a user by id and responds with the updated user",
       "queries": [],
@@ -39,6 +54,9 @@
         "createdAt": "2025-01-15T14:31:18.210Z",
         "__v": 0
       }
+    },
+    "DELETE /users/:user_id": {
+      "description": "Deletes a user by user id"
     }
   },
 
@@ -75,6 +93,95 @@
           "email": "cosmic@testmail.com",
           "savedLists": ["6784d7a5844f23ac9810cf30"],
           "createdAt": "2025-01-15T14:01:54.251Z",
+          "__v": 0
+        }
+      ]
+    },
+    "GET /users/:user_id/users": {
+      "description": "serves all groups with a specified user by id, and populates the members",
+      "queries": [],
+      "exampleResponse": [
+        {
+          "_id": "6784d715844f23ac9810cf28",
+          "name": "test_group",
+          "description": "A group for all things testing",
+          "owner": ["6784d64b844f23ac9810cf21"],
+          "members": [
+            {
+              "_id": "6784d64b844f23ac9810cf21",
+              "username": "sparkle_unicorn",
+              "name": "Sparkle Unicorn",
+              "email": "sparkle@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf30"],
+              "createdAt": "2025-01-16T10:25:18.721Z",
+              "__v": 0
+            },
+            {
+              "_id": "6784d64b844f23ac9810cf22",
+              "username": "pixel_penguin",
+              "name": "Pixel Penguin",
+              "email": "pixel@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf30"],
+              "createdAt": "2025-01-16T10:25:18.721Z",
+              "__v": 0
+            },
+            {
+              "_id": "6784d64b844f23ac9810cf23",
+              "username": "cosmic_koala",
+              "name": "Cosmic Koala",
+              "email": "cosmic@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf30"],
+              "createdAt": "2025-01-16T10:25:18.721Z",
+              "__v": 0
+            }
+          ],
+          "createdAt": "2025-01-16T10:25:15.771Z",
+          "__v": 0
+        },
+        {
+          "_id": "6784d715844f23ac9810cf29",
+          "name": "coding_club",
+          "description": "A group for coding enthusiasts",
+          "owner": ["6784d64b844f23ac9810cf24"],
+          "members": [
+            {
+              "_id": "6784d64b844f23ac9810cf24",
+              "username": "robo_raptor",
+              "name": "Robo Raptor",
+              "email": "robo@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf33"],
+              "createdAt": "2025-01-16T10:25:18.722Z",
+              "__v": 0
+            },
+            {
+              "_id": "6784d64b844f23ac9810cf25",
+              "username": "ninja_narwhal",
+              "name": "Ninja Narwhal",
+              "email": "ninja@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf33"],
+              "createdAt": "2025-01-16T10:25:18.722Z",
+              "__v": 0
+            },
+            {
+              "_id": "6784d64b844f23ac9810cf26",
+              "username": "galaxy_giraffe",
+              "name": "Galaxy Giraffe",
+              "email": "galaxy@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf33"],
+              "createdAt": "2025-01-16T10:25:18.722Z",
+              "__v": 0
+            },
+            {
+              "_id": "6784d64b844f23ac9810cf21",
+              "username": "sparkle_unicorn",
+              "name": "Sparkle Unicorn",
+              "email": "sparkle@testmail.com",
+              "savedLists": ["6784d7a5844f23ac9810cf30"],
+              "createdAt": "2025-01-16T10:25:18.721Z",
+              "__v": 0
+            }
+          ],
+          "createdAt": "2025-01-16T10:25:15.771Z",
           "__v": 0
         }
       ]
@@ -218,8 +325,81 @@
         "__v": 0
       }
     },
+    "PUT /lists/:listId": {
+      "description": "edits a list by id and responds with the updated list",
+      "queries": [],
+      "allowedFields": ["title", "description", "options", "owner", "members"],
+      "exampleBody": {
+        "title": "Weekly Standup Test",
+        "description": "A test list update",
+        "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"]
+      },
+      "exampleResponse": {
+        "_id": "6784d7a5844f23ac9810cf30",
+        "title": "Weekly Standup Test",
+        "description": "A test list update",
+        "options": ["6784d7b5844f23ac9810cf31", "6784d7b5844f23ac9810cf32"],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+        "createdAt": "2025-01-15T17:44:57.763Z",
+        "__v": 0
+      }
+    },
+    "DELETE /lists/:listId/": {
+      "description": "deletes a list given a list id"
+    },
     "DELETE /lists/:listId/options/:optionId": {
       "description": "deletes an option given list id and option id"
+    },
+    "POST /lists/:listId/options": {
+      "description": "adds an option to a specific list and returns the updated list",
+      "queries": [],
+      "requiredFields": ["name", "description", "customFields"],
+      "exampleBody": {
+        "name": "Team Meeting",
+        "description": "A recurring team meeting option",
+        "customFields": ["time: 1 hour", "location: Zoom"]
+      },
+      "exampleResponse": {
+        "_id": "6784d7a5844f23ac9810cf30",
+        "title": "Weekly Standup",
+        "description": "A list for organizing weekly standup meetings",
+        "options": [
+          {
+            "_id": "6784d7b5844f23ac9810cf31"
+          },
+          {
+            "_id": "6784d7b5844f23ac9810cf32"
+          },
+          {
+            "_id": "6784d7b5844f23ac9810cf33"
+          }
+        ],
+        "owner": "6784d64b844f23ac9810cf21",
+        "members": ["6784d64b844f23ac9810cf22", "6784d64b844f23ac9810cf23"],
+        "createdAt": "2025-01-15T16:09:17.594Z",
+        "__v": 0
+      }
+    },
+    "PUT /lists/:listId/options/:optionId": {
+      "description": "edits an option by id, given list id and option id, and returns the updated option",
+      "queries": [],
+      "allowedFields": ["name", "description", "customFields"],
+      "exampleBody": {
+        "name": "'Daily Updates Now With Even More Updates'",
+        "description": "'Brief updates with a side of extra updates from each team member'",
+        "customFields": "['time investment: 15 mins', 'mood: positive']",
+        "owner": "'6784d7a5844f23ac9810cf30'"
+      },
+      "exampleResponse": {
+        "name": "'Daily Updates Now With Even More Updates'",
+        "description": "'Brief updates with a side of extra updates from each team member'",
+        "customFields": "['time investment: 15 mins', 'mood: positive']",
+        "owner": "'6784d7a5844f23ac9810cf30'",
+        "__v": 0
+      }
     }
   },
 

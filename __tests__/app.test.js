@@ -115,6 +115,28 @@ describe('GET /groups/:groupId', () => {
   });
 });
 
+describe('GET /users/:user_id/groups', () => {
+  test('200: responds with all groups, with populated members, that a user is part of', async () => {
+    const userId = '6784d64b844f23ac9810cf21';
+    const response = await request(app.callback()).get(
+      `/users/${userId}/groups`
+    );
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0]).toMatchObject({
+      _id: expect.any(String),
+      name: expect.any(String),
+      description: expect.any(String),
+      owner: expect.any(Array),
+      __v: expect.any(Number),
+    });
+    expect(response.body[0].members[0]).toMatchObject({
+      username: expect.any(String),
+      name: expect.any(String),
+    });
+  });
+});
+
 describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
@@ -465,6 +487,78 @@ describe('DELETE /lists/:listId', () => {
     expect(response.body.error).toBe('List Not Found');
   });
 });
+
+describe('POST /users', () => {
+  test('201: posts a new user and returns that new user', async () => {
+    const testUser = {
+      _id: '6784d64b844f23ac9810cf27',
+      username: 'huge_hippo',
+      name: 'Hugo Hippo',
+      email: 'hugohipster@testmail.com',
+    };
+
+    const response = await request(app.callback())
+      .post('/users')
+      .send(testUser);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '6784d64b844f23ac9810cf27',
+        username: 'huge_hippo',
+        name: 'Hugo Hippo',
+        email: 'hugohipster@testmail.com',
+        savedLists: [],
+        __v: 0,
+        createdAt: expect.any(String),
+      })
+    );
+  });
+});
+
+describe('POST /lists/:listId/options', () => {
+  test('200: responds with modified list with option addedclear', async () => {
+    const listId = '6784d7a5844f23ac9810cf30';
+    const testOption = {
+      name: 'Alex option 6',
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(200);
+    expect(response.body.options.length).toBe(3);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        title: 'Weekly Standup',
+        description: 'A list for organizing weekly standup meetings',
+        owner: '6784d64b844f23ac9810cf21',
+        createdAt: expect.any(String),
+        _id: expect.any(String),
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with 404 error if invalid ListId', async () => {
+    const listId = '00000a00000b00000c00000d';
+    const testOption = {
+      name: 'Alex option 6',
+      description: 'Alex option for this list6',
+      customFields: ['time investment: 40 mins', 'mood: relax'],
+    };
+
+    const response = await request(app.callback())
+      .post(`/lists/${listId}/options`)
+      .send(testOption);
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('List Not Found');
+  });
+});
+
 describe('DELETE /lists/:listId/options/:optionId', () => {
   test('204: deletes option by optionId', async () => {
     const optionId = '6784d7b5844f23ac9810cf31';
@@ -491,6 +585,76 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Option Not Found');
+  });
+});
+
+describe('PUT /lists/:listId/options/:optionId', () => {
+  test('200: updates option by optionId (and ListId) and responds with the updated option', async () => {
+    const optionId = '6784d7b5844f23ac9810cf31';
+    const listId = '6784d7a5844f23ac9810cf30';
+
+    const optionUpdate = {
+      name: 'Daily Updates Now With Even More Updates',
+      description:
+        'Brief updates with a side of extra updates from each team member',
+      customFields: ['time investment: 15 mins', 'mood: positive'],
+      owner: '6784d7a5844f23ac9810cf30',
+    };
+
+    const response = await request(app.callback())
+      .put(`/lists/${listId}/options/${optionId}`)
+      .send(optionUpdate);
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        name: 'Daily Updates Now With Even More Updates',
+        description:
+          'Brief updates with a side of extra updates from each team member',
+        customFields: ['time investment: 15 mins', 'mood: positive'],
+        owner: '6784d7a5844f23ac9810cf30',
+        __v: 0,
+      })
+    );
+  });
+  test('404: responds with error if cannot find optionId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const listId = '6784d7a5844f23ac9810cf30';
+    const optionUpdate = {
+      name: 'Daily Updates Now With Even More Updates',
+      description:
+        'Brief updates with a side of extra updates from each team member',
+      customFields: ['time investment: 15 mins', 'mood: positive'],
+      owner: '6784d7a5844f23ac9810cf30',
+    };
+    const response = await request(app.callback())
+      .put(`/lists/${listId}/options/${invalidId}`)
+      .send(optionUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Option Not Found');
+  });
+});
+
+describe('DELETE /users/:userId/', () => {
+  test('204: deletes user by userId', async () => {
+    const userId = '6784d64b844f23ac9810cf22';
+
+    const response = await request(app.callback())
+      .delete(`/users/${userId}`);
+
+    expect(response.status).toBe(204);
+
+    const deletedUser = await User.findById(userId);
+    expect(deletedUser).toBeNull();
+  });
+  test('404: responds with error message for invalid userId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).delete(
+      `/users/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('User Not Found');
   });
 });
 
