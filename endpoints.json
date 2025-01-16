@@ -9,6 +9,30 @@
   },
 
   "USERS": {
+    "GET /users/": {
+      "description": "serves all users",
+      "queries": ["username"],
+      "exampleResponse": [
+        {
+          "_id": "6784d64b844f23ac9810cf21",
+          "username": "sparkle_unicorn",
+          "name": "Sparkle Unicorn",
+          "email": "sparkle@testmail.com",
+          "savedLists": ["6784d7a5844f23ac9810cf30"],
+          "createdAt": "2025-01-16T12:41:54.179Z",
+          "__v": 0
+        },
+        {
+          "_id": "6784d64b844f23ac9810cf22",
+          "username": "pixel_penguin",
+          "name": "Pixel Penguin",
+          "email": "pixel@testmail.com",
+          "savedLists": ["6784d7a5844f23ac9810cf30"],
+          "createdAt": "2025-01-16T12:41:54.181Z",
+          "__v": 0
+        }
+      ]
+    },
     "GET /users/:userId": {
       "description": "serves a user object containing user information",
       "queries": [],
