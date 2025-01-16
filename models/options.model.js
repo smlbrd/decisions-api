@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const optionSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String },
+  image_url: { type: String },
   customFields: [{ type: String }],
   owner: { type: mongoose.Schema.Types.ObjectId, ref: 'List' },
   createdAt: { type: Date, immutable: true, default: Date.now() },

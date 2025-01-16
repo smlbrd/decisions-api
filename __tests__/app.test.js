@@ -8,6 +8,7 @@ const groupsData = require('../database/test-data/test-groups');
 const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
+const decisionsProcessesData = require('../database/test-data/test-decisions-processes');
 const Option = require('../models/options.model');
 const User = require('../models/users.model');
 const Group = require('../models/groups.model');
@@ -20,7 +21,14 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await seed(usersData, groupsData, listsData, optionsData, decisionsData);
+  await seed(
+    usersData,
+    groupsData,
+    listsData,
+    optionsData,
+    decisionsProcessesData,
+    decisionsData
+  );
 });
 
 afterAll(async () => {

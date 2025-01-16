@@ -2,11 +2,10 @@ const mongoose = require('mongoose');
 
 const decisionSchema = new mongoose.Schema(
   {
-    list: { type: mongoose.Schema.Types.ObjectId, ref: 'List', required: true },
+    list: { type: mongoose.Schema.Types.ObjectId, ref: 'List' },
     group: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
-      required: true,
     },
     votes: [
       {
@@ -31,11 +30,13 @@ const decisionSchema = new mongoose.Schema(
     decisionsProcess_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'DecisionsProcess',
-      required: true,
     },
     saveData: { type: Object, default: {} },
     completedAt: { type: Date },
-    outcome: { type: mongoose.Schema.Types.ObjectId, ref: Options },
+    outcome: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Option',
+    },
   },
   { timestamps: true }
 );
