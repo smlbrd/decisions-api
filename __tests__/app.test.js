@@ -9,6 +9,7 @@ const listsData = require('../database/test-data/test-lists');
 const optionsData = require('../database/test-data/test-options');
 const decisionsData = require('../database/test-data/test-decisions');
 const Option = require('../models/options.model');
+const User = require('../models/users.model');
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;

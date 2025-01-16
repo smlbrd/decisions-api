@@ -60,7 +60,6 @@ const userController = {
   },
   deleteUser: async (ctx) => {
     const userId = ctx.params.userId;
-    console.log(userId, '<<< UserID')
     try {
       const user = await User.findOneAndDelete({ _id: userId });
 
