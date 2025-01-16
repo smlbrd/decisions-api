@@ -104,6 +104,37 @@ const groupController = {
       ctx.body = err;
     }
   },
+  removeUserByIdFromGroupById: async (ctx) => {
+    const groupId = ctx.params.groupId;
+    const userId = ctx.params.userId;
+  
+    try {
+      const group = await Group.findById(groupId);
+      if (!group) {
+        ctx.status = 404;
+        ctx.body = { error: 'Group Not Found' };
+        return;
+      }
+      const user = group.members.some(
+        member => member._id.toString() === userId
+      );
+  
+      if (!user) {
+        ctx.status = 404;
+        ctx.body = { error: 'User Not Found' };
+        return;
+      }
+      group.members = group.members.filter(
+        member => member._id.toString() !== userId
+      );
+      await group.save();
+  
+      ctx.status = 204;
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
+  },
 };
 
 module.exports = groupController;
