@@ -89,6 +89,29 @@ const controller = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+  updateOptionById: async (ctx) => {
+    const { listId, optionId } = ctx.params;
+    const optionInput = ctx.request.body;
+
+    try {
+      const updatedOption = await Option.findByIdAndUpdate(
+        { _id: optionId, owner: listId },
+        optionInput,
+        { new: true }
+      );
+
+      if (!updatedOption) {
+        ctx.status = 404;
+        ctx.body = { error: 'Option Not Found' };
+      } else {
+        ctx.status = 200;
+        ctx.body = updatedOption;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
 };
 
 module.exports = controller;

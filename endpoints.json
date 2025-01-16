@@ -220,6 +220,24 @@
     },
     "DELETE /lists/:listId/options/:optionId": {
       "description": "deletes an option given list id and option id"
+    },
+    "PUT /lists/:listId/options/:optionId": {
+      "description": "edits an option by id, given list id and option id, and returns the updated option",
+      "queries": [],
+      "allowedFields": ["name", "description", "customFields"],
+      "exampleBody": {
+        "name": "'Daily Updates Now With Even More Updates'",
+        "description": "'Brief updates with a side of extra updates from each team member'",
+        "customFields": "['time investment: 15 mins', 'mood: positive']",
+        "owner": "'6784d7a5844f23ac9810cf30'"
+      },
+      "exampleResponse": {
+        "name": "'Daily Updates Now With Even More Updates'",
+        "description": "'Brief updates with a side of extra updates from each team member'",
+        "customFields": "['time investment: 15 mins', 'mood: positive']",
+        "owner": "'6784d7a5844f23ac9810cf30'",
+        "__v": 0
+      }
     }
   },
 
