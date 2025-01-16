@@ -54,6 +54,9 @@
         "createdAt": "2025-01-15T14:31:18.210Z",
         "__v": 0
       }
+    },
+    "DELETE /users/:user_id": {
+      "description": "Deletes a user by user id"
     }
   },
 
