@@ -89,6 +89,7 @@ const controller = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+
   updateOptionById: async (ctx) => {
     const { listId, optionId } = ctx.params;
     const optionInput = ctx.request.body;
@@ -112,6 +113,34 @@ const controller = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+
+
+  addItemToList: async (ctx) => {
+    const listId = ctx.params.listId;
+    const optionInput = ctx.request.body
+
+    try {
+      optionInput.owner = listId;
+
+      const newOption = new Option(optionInput);
+      const savedOption = await newOption.save();
+
+      const updatedList = await List.findByIdAndUpdate(listId, { $push: { options: savedOption._id } }, { new: true });
+
+      if (!updatedList) {
+        ctx.status = 404;
+        ctx.body = { error: 'List Not Found' };
+      } else {
+        ctx.status = 200;
+        ctx.body = updatedList;
+      }
+    }
+    catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: "Internal server error" };
+    }
+  }
+
 };
 
 module.exports = controller;

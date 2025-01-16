@@ -40,18 +40,21 @@ route.get('/api', apiController.getEndpoints);
 route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);
+route.post("/users", userController.postNewUser)
 
 route.get('/groups/:groupId', groupController.getGroupById);
 route.put('/groups/:groupId', groupController.editGroupById);
 route.get('/groups/:groupId/members', groupController.getMembersByGroupId);
 route.post('/groups', groupController.postGroup);
 route.delete('/groups/:groupId', groupController.deleteGroupById);
+
 route.post('/decisions', decisionController.postDecision);
 
 route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);
 route.post('/lists', listController.postList);
 route.delete('/lists/:listId', listController.deleteListById);
+route.post('/lists/:listId/options', listController.addItemToList);
 route.delete(
   '/lists/:listId/options/:optionId',
   listController.deleteOptionById
