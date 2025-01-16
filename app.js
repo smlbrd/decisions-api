@@ -41,6 +41,7 @@ route.get('/users/:userId', userController.getUserById);
 route.put('/users/:userId', userController.updateUserById);
 route.get('/users/:userId/saved_lists', userController.getListsByUserId);
 route.post("/users", userController.postNewUser)
+route.delete('/users/:userId', userController.deleteUser);
 
 route.get('/groups/:groupId', groupController.getGroupById);
 route.put('/groups/:groupId', groupController.editGroupById);
