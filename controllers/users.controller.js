@@ -18,8 +18,13 @@ const userController = {
     try {
       if (ctx.query.username) {
         const user = await User.find({ username: ctx.query.username });
-        ctx.status = 200;
-        ctx.body = user[0];
+        if (user.length === 0) {
+          ctx.status = 404;
+          ctx.body = { error: 'Username not found!' };
+        } else {
+          ctx.status = 200;
+          ctx.body = user[0];
+        }
       } else {
         const users = await User.find();
         ctx.status = 200;

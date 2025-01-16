@@ -692,6 +692,12 @@ describe('GET /users', () => {
       savedLists: ['6784d7a5844f23ac9810cf33'],
     });
   });
+  test('404: not found status if the username does not exist', async () => {
+    const response = await request(app.callback()).get(
+      `/users?username=invalidUsername`
+    );
+    expect(response.status).toBe(404);
+  });
 });
 
 describe('DELETE /groups/:groupId/users/:userId', () => {
