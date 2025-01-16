@@ -1,8 +1,7 @@
 module.exports = [
   {
-    _id: '6784d7a5844f23ac9810cf40',
-    list_id: '6784d7a5844f23ac9810cf30',
-    group_id: '6784d715844f23ac9810cf28',
+    list: '6784d7a5844f23ac9810cf30',
+    group: '6784d715844f23ac9810cf28',
     votes: [
       {
         user: '6784d64b844f23ac9810cf22',
@@ -13,12 +12,10 @@ module.exports = [
         option: '6784d7b5844f23ac9810cf32',
       },
     ],
-    voting_status: 'not started',
-    decision_process_id: '6784d7a5844f23ac9810cf50',
-    save_data: {
-      additionalInfo: 'This decision is for the weekly standup meeting.',
-    },
-    completed_at: null,
+    votingStatus: 'not started',
+    decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+    saveData: {},
+    completedAt: null,
     outcome: null,
   },
 ];
