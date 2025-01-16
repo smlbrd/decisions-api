@@ -476,7 +476,7 @@ describe('POST /users', () => {
     const response = await request(app.callback())
       .post('/users')
       .send(testUser);
-    
+
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -563,5 +563,29 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Option Not Found');
+  });
+});
+describe.only('DELETE /users/:userId/', () => {
+  test('204: deletes user by userId', async () => {
+    const userId = '6784d7b5844f23ac9810cf31';
+
+    const response = await request(app.callback()).delete(
+      `/users/${userId}`
+    );
+
+    expect(response.status).toBe(204);
+
+    const deletedUser = await User.findById(userId);
+    expect(deletedUser).toBeNull();
+  });
+  test('404: responds with error message for invalid userId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+
+    const response = await request(app.callback()).delete(
+      `/users/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('User Not Found');
   });
 });

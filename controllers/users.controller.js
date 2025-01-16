@@ -58,6 +58,9 @@ const userController = {
       ctx.body = err;
     }
   },
+  deleteUser: async (ctx) => {
+
+  }
 };
 
 module.exports = userController;
