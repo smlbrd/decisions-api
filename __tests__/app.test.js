@@ -113,6 +113,28 @@ describe('GET /groups/:groupId', () => {
   });
 });
 
+describe('GET /users/:user_id/groups', () => {
+  test('200: responds with all groups, with populated members, that a user is part of', async () => {
+    const userId = '6784d64b844f23ac9810cf21';
+    const response = await request(app.callback()).get(
+      `/users/${userId}/groups`
+    );
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(2);
+    expect(response.body[0]).toMatchObject({
+      _id: expect.any(String),
+      name: expect.any(String),
+      description: expect.any(String),
+      owner: expect.any(Array),
+      __v: expect.any(Number),
+    });
+    expect(response.body[0].members[0]).toMatchObject({
+      username: expect.any(String),
+      name: expect.any(String),
+    });
+  });
+});
+
 describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
@@ -476,7 +498,7 @@ describe('POST /users', () => {
     const response = await request(app.callback())
       .post('/users')
       .send(testUser);
-    
+
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -496,7 +518,7 @@ describe('POST /lists/:listId/options', () => {
   test('200: responds with modified list with option addedclear', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
     const testOption = {
-      name: "Alex option 6",
+      name: 'Alex option 6',
       description: 'Alex option for this list6',
       customFields: ['time investment: 40 mins', 'mood: relax'],
     };
@@ -517,12 +539,11 @@ describe('POST /lists/:listId/options', () => {
         __v: 0,
       })
     );
-
   });
   test('404: responds with 404 error if invalid ListId', async () => {
     const listId = '00000a00000b00000c00000d';
     const testOption = {
-      name: "Alex option 6",
+      name: 'Alex option 6',
       description: 'Alex option for this list6',
       customFields: ['time investment: 40 mins', 'mood: relax'],
     };
@@ -533,7 +554,6 @@ describe('POST /lists/:listId/options', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('List Not Found');
-
   });
 });
 

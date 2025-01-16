@@ -47,6 +47,7 @@ route.put('/groups/:groupId', groupController.editGroupById);
 route.get('/groups/:groupId/members', groupController.getMembersByGroupId);
 route.post('/groups', groupController.postGroup);
 route.delete('/groups/:groupId', groupController.deleteGroupById);
+route.get('/users/:user_id/groups', groupController.getGroupsByUserId);
 
 route.post('/decisions', decisionController.postDecision);
 

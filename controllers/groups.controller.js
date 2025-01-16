@@ -7,6 +7,7 @@ const groupController = {
       const group = await Group.findById({ _id: groupId });
 
       if (!group) {
+        console.log;
         ctx.status = 404;
         ctx.body = { error: 'No results!' };
       } else {
@@ -16,6 +17,20 @@ const groupController = {
     } catch (err) {
       console.log(err);
       ctx.status = 500;
+      ctx.body = err;
+    }
+  },
+  getGroupsByUserId: async (ctx) => {
+    const userId = ctx.params.user_id;
+    try {
+      const groups = await Group.find({ members: { $in: [userId] } }).populate(
+        'members'
+      );
+      ctx.status = 200;
+      ctx.body = groups;
+    } catch (err) {
+      console.log(err);
+      ctx.status(500);
       ctx.body = err;
     }
   },
