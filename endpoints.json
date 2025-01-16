@@ -242,6 +242,9 @@
     },
     "DELETE /groups/:group_id": {
       "description": "deletes a group by id"
+    },
+    "DELETE /groups/:groupId/users/:userId": {
+      "description": "deletes a user by userId from a group specified by groupId"
     }
   },
 
