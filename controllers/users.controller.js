@@ -14,6 +14,22 @@ const userController = {
       ctx.body = user;
     }
   },
+  getUsers: async (ctx) => {
+    try {
+      if (ctx.query.username) {
+        const user = await User.find({ username: ctx.query.username });
+        ctx.status = 200;
+        ctx.body = user[0];
+      } else {
+        const users = await User.find();
+        ctx.status = 200;
+        ctx.body = users;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = err;
+    }
+  },
   updateUserById: async (ctx) => {
     const userId = ctx.params.userId;
     const userInput = ctx.request.body;
@@ -73,7 +89,7 @@ const userController = {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
-  }
+  },
 };
 
 module.exports = userController;
