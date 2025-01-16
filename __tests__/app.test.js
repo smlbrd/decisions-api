@@ -733,7 +733,7 @@ describe('DELETE /groups/:groupId/users/:userId', () => {
 });
 describe('GET /decisions/:decisionId', () => {
   test('200: responds with decision for corresponding decision ID', async () => {
-    const decisionId = '6784d7a5844f23ac9810cf40';
+    const decisionId = '678940615a51bf4a2ed681c0';
 
     const response = await request(app.callback())
       .get(`/decisions/${decisionId}`);
@@ -741,12 +741,12 @@ describe('GET /decisions/:decisionId', () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
       expect.objectContaining({
-        _id: '6784d7a5844f23ac9810cf40',
-        // list: '6784d7a5844f23ac9810cf30',
-        // group: '6784d715844f23ac9810cf28',
+        _id: '678940615a51bf4a2ed681c0',
+        list: '6784d7a5844f23ac9810cf30',
+        group: '6784d715844f23ac9810cf28',
         votingStatus: 'not started',
-        // decisionsProcess_id: '6784d7a5844f23ac9810cf50',
-        // completedAt: null,
+        decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+        completedAt: null,
         outcome: null,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
