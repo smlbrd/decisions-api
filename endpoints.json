@@ -542,6 +542,9 @@
         "createdAt": "2025-01-17T09:47:09.866Z",
         "updatedAt": "2025-01-17T09:47:09.992Z"
       }
+    },
+    "DELETE /decsions/:decisionId": {
+      "description": "Deletes a decison by decision id"
     }
   },
 
