@@ -486,6 +486,33 @@
         "__v": 0
       }
     },
+    "GET /decisions/:decisionId": {
+      "description": "serves with decision with specific Decision ID ",
+      "exampleResponse": {
+        "_id": "678940615a51bf4a2ed681c0",
+        "list": "6784d7a5844f23ac9810cf33",
+        "group": "6784d715844f23ac9810cf29",
+        "votes": [
+          {
+            "user": "6784d64b844f23ac9810cf24",
+            "option": "6784d7b5844f23ac9810cf34",
+            "_id": "678a1cdbf1f6297f75e21024"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf25",
+            "option": "6784d7b5844f23ac9810cf35",
+            "_id": "678a1cdbf1f6297f75e21025"
+          }
+        ],
+        "votingStatus": "not started",
+        "decisionsProcess_id": "6784d7a5844f23ac9810cf50",
+        "completedAt": null,
+        "outcome": null,
+        "createdAt": "2025-01-17T09:03:23.505Z",
+        "updatedAt": "2025-01-17T09:03:23.505Z",
+        "__v": 0
+      }
+    },
     "PUT /decisions/decisionId": {
       "description": "Edits a decision by decisionId and responds with the updated decision",
       "queries": [],
@@ -547,7 +574,7 @@
       "description": "Deletes a decison by decision id"
     },
     "GET /groups/:groupId/decisions": {
-      "description": "responds with every decision with this groupId ",
+      "description": "serves with every decision with this groupId ",
       "exampleResponse": [
         {
           "_id": "678940615a51bf4a2ed681c0",
