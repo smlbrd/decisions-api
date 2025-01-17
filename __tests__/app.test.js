@@ -12,6 +12,7 @@ const decisionsProcessesData = require('../database/test-data/test-decisions-pro
 const Option = require('../models/options.model');
 const User = require('../models/users.model');
 const Group = require('../models/groups.model');
+const Decision = require('../models/decisions.model');
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -869,6 +870,30 @@ describe('PUT /decisions/:decisionId', () => {
     const response = await request(app.callback())
       .put(`/decisions/${invalidId}`)
       .send(decisionUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Decision Not Found');
+  });
+});
+
+describe('DELETE /decisions/:decisionId', () => {
+  test('204: deletes a decision by decisionId from decisions', async () => {
+    const decisionId = '678940615a51bf4a2ed681c0';
+
+    const response = await request(app.callback()).delete(
+      `/decisions/${decisionId}`
+    );
+
+    expect(response.status).toBe(204);
+    const updatedDecision = await Decision.findById(decisionId);
+    expect(updatedDecision).toBeNull();
+  });
+  test('404: responds with error for when decisionId invalid', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    
+    const response = await request(app.callback()).delete(
+      `/decisions/${invalidId}`
+    );
+
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decision Not Found');
   });
