@@ -485,6 +485,63 @@
         "updatedAt": "2025-01-17T09:03:23.505Z",
         "__v": 0
       }
+    },
+    "PUT /decisions/decisionId": {
+      "description": "Edits a decision by decisionId and responds with the updated decision",
+      "queries": [],
+      "allowedFields": ["votes", "votingStatus", "outcome"],
+      "exampleBody": {
+        "list": "6784d7a5844f23ac9810cf30",
+        "group": "6784d715844f23ac9810cf28",
+        "votes": [
+          {
+            "user": "6784d64b844f23ac9810cf22",
+            "option": "6784d7b5844f23ac9810cf31"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf23",
+            "option": "6784d7b5844f23ac9810cf32"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf21",
+            "option": "6784d7b5844f23ac9810cf31"
+          }
+        ],
+        "votingStatus": "completed",
+        "decisionsProcess_id": "6784d7a5844f23ac9810cf50",
+        "saveData": {},
+        "completedAt": 1737107229891,
+        "outcome": "6784d7b5844f23ac9810cf31"
+      },
+      "exampleResponse": {
+        "_id": "678940615a51bf4a2ed681c0",
+        "list": "6784d7a5844f23ac9810cf30",
+        "group": "6784d715844f23ac9810cf28",
+        "votes": [
+          {
+            "user": "6784d64b844f23ac9810cf22",
+            "option": "6784d7b5844f23ac9810cf31",
+            "_id": "678a271ec2145eee7dd06525"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf23",
+            "option": "6784d7b5844f23ac9810cf32",
+            "_id": "678a271ec2145eee7dd06526"
+          },
+          {
+            "user": "6784d64b844f23ac9810cf21",
+            "option": "6784d7b5844f23ac9810cf31",
+            "_id": "678a271ec2145eee7dd06527"
+          }
+        ],
+        "votingStatus": "completed",
+        "decisionsProcess_id": "6784d7a5844f23ac9810cf50",
+        "completedAt": "2025-01-17T09:47:09.891Z",
+        "outcome": "6784d7b5844f23ac9810cf31",
+        "__v": 0,
+        "createdAt": "2025-01-17T09:47:09.866Z",
+        "updatedAt": "2025-01-17T09:47:09.992Z"
+      }
     }
   },
 
