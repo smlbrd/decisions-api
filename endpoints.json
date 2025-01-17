@@ -435,7 +435,13 @@
       "description": "posts a voting process and responds with the newly posted voting process",
       "notes": "",
       "queries": [],
-      "requiredFields": ["name", "description", "customFields"],
+      "requiredFields": [
+        "list",
+        "group",
+        "user",
+        "option",
+        "decisionsProcess_id"
+      ],
       "exampleBody": {
         "list": "6784d7a5844f23ac9810cf33",
         "group": "6784d715844f23ac9810cf29",
