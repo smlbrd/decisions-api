@@ -879,8 +879,9 @@ describe('GET /groups/:groupId/decisions', () => {
   test('200: responds with decisions for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
 
-    const response = await request(app.callback())
-      .get(`/groups/${groupId}/decisions`);
+    const response = await request(app.callback()).get(
+      `/groups/${groupId}/decisions`
+    );
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
@@ -895,7 +896,7 @@ describe('GET /groups/:groupId/decisions', () => {
         updatedAt: expect.any(String),
         __v: 0,
       })
-    )
+    );
     expect(response.body[1]).toEqual(
       expect.objectContaining({
         _id: '678940615a51bf4a2ed681c1',
@@ -912,8 +913,9 @@ describe('GET /groups/:groupId/decisions', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback())
-      .get(`/groups/${invalidId}/decisions`);
+    const response = await request(app.callback()).get(
+      `/groups/${invalidId}/decisions`
+    );
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decisions Not Found');
@@ -923,8 +925,9 @@ describe('GET /users/:userId/decisions', () => {
   test('200: responds with decisions for corresponding user ID', async () => {
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app.callback())
-      .get(`/users/${userId}/decisions`);
+    const response = await request(app.callback()).get(
+      `/users/${userId}/decisions`
+    );
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
@@ -939,7 +942,7 @@ describe('GET /users/:userId/decisions', () => {
         updatedAt: expect.any(String),
         __v: 0,
       })
-    )
+    );
     expect(response.body[1]).toEqual(
       expect.objectContaining({
         _id: '678940615a51bf4a2ed681c1',
@@ -956,11 +959,14 @@ describe('GET /users/:userId/decisions', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback())
-      .get(`/groups/${invalidId}/decisions`);
+    const response = await request(app.callback()).get(
+      `/groups/${invalidId}/decisions`
+    );
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decisions Not Found');
+  });
+});
 
 describe('DELETE /decisions/:decisionId', () => {
   test('204: deletes a decision by decisionId from decisions', async () => {
@@ -976,7 +982,7 @@ describe('DELETE /decisions/:decisionId', () => {
   });
   test('404: responds with error for when decisionId invalid', async () => {
     const invalidId = '00000a00000b00000c00000d';
-    
+
     const response = await request(app.callback()).delete(
       `/decisions/${invalidId}`
     );
