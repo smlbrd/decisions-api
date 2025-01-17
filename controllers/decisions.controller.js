@@ -16,18 +16,18 @@ const decisionController = {
   getDecisionById: async (ctx) => {
     const decisionId = ctx.params.decisionId;
     try {
-      const decision = await Decision.findById({ _id: decisionId });
+      const decision = await Decision.findById({ _id: decisionId })
+        .populate({ path: 'list', populate: { path: 'options' } })
+        .populate('group');
 
       if (!decision) {
         ctx.status = 404;
         ctx.body = { error: 'Decision Not Found' };
-      }
-      else {
+      } else {
         ctx.status = 200;
         ctx.body = decision;
       }
-    }
-    catch (err) {
+    } catch (err) {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
@@ -38,14 +38,12 @@ const decisionController = {
       const decisionsInGroup = await Decision.find({ group: groupId });
       if (decisionsInGroup.length > 0) {
         ctx.status = 200;
-        ctx.body = decisionsInGroup
-      }
-      else {
+        ctx.body = decisionsInGroup;
+      } else {
         ctx.status = 404;
         ctx.body = { error: 'Decisions Not Found' };
       }
-    }
-    catch (err) {
+    } catch (err) {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
@@ -55,9 +53,13 @@ const decisionController = {
     const decisionInput = ctx.request.body;
 
     try {
-      const updatedDecision = await Decision.findByIdAndUpdate(decisionId, decisionInput, {
-        new: true,
-      });
+      const updatedDecision = await Decision.findByIdAndUpdate(
+        decisionId,
+        decisionInput,
+        {
+          new: true,
+        }
+      );
       if (!updatedDecision) {
         ctx.status = 404;
         ctx.body = { error: 'Decision Not Found' };
@@ -74,26 +76,20 @@ const decisionController = {
     const userId = ctx.params.userId;
     let decisionsGroups = [];
     try {
-      const groups = await Group.find({ members: { $in: [userId] } })
-        .populate('members');
-
+      const groups = await Group.find({ members: { $in: [userId] } });
 
       for (const group of groups) {
-        const decisions = await Decision.find({ group: group._id })
-          .populate('votes');
+        const decisions = await Decision.find({ group: group._id });
         decisionsGroups.push(...decisions);
       }
       if (decisionsGroups.length === 0) {
         ctx.status = 404;
         ctx.body = { error: 'Decisions Not Found' };
-
-      }
-      else {
+      } else {
         ctx.status = 200;
         ctx.body = decisionsGroups;
       }
-    }
-    catch (err) {
+    } catch (err) {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
@@ -113,7 +109,7 @@ const decisionController = {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
-  }
+  },
 };
 
 module.exports = decisionController;

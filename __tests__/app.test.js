@@ -384,16 +384,6 @@ describe('POST: /decisions', () => {
       _id: '678936353c1e50fdb8f4c0d7',
       list: '6784d7a5844f23ac9810cf33',
       group: '6784d715844f23ac9810cf29',
-      votes: [
-        {
-          user: '6784d64b844f23ac9810cf24',
-          option: '6784d7b5844f23ac9810cf34',
-        },
-        {
-          user: '6784d64b844f23ac9810cf25',
-          option: '6784d7b5844f23ac9810cf35',
-        },
-      ],
       votingStatus: 'not started',
       decisionsProcess_id: '6784d7a5844f23ac9810cf50',
       saveData: {},
@@ -411,18 +401,6 @@ describe('POST: /decisions', () => {
         _id: '678936353c1e50fdb8f4c0d7',
         list: '6784d7a5844f23ac9810cf33',
         group: '6784d715844f23ac9810cf29',
-        votes: [
-          {
-            user: '6784d64b844f23ac9810cf24',
-            option: '6784d7b5844f23ac9810cf34',
-            _id: expect.any(String),
-          },
-          {
-            user: '6784d64b844f23ac9810cf25',
-            option: '6784d7b5844f23ac9810cf35',
-            _id: expect.any(String),
-          },
-        ],
         votingStatus: 'not started',
         decisionsProcess_id: '6784d7a5844f23ac9810cf50',
         outcome: null,
@@ -750,8 +728,8 @@ describe('GET /decisions/:decisionId', () => {
     expect(response.body).toEqual(
       expect.objectContaining({
         _id: '678940615a51bf4a2ed681c0',
-        list: '6784d7a5844f23ac9810cf30',
-        group: '6784d715844f23ac9810cf28',
+        list: expect.any(Object),
+        group: expect.any(Object),
         votingStatus: 'not started',
         decisionsProcess_id: '6784d7a5844f23ac9810cf50',
         completedAt: null,
@@ -761,7 +739,7 @@ describe('GET /decisions/:decisionId', () => {
         __v: 0,
       })
     );
-    expect(response.body.votes.length).toBe(2);
+    expect(typeof response.body.list.options[0]).toBe('object');
   });
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
@@ -783,20 +761,6 @@ describe('PUT /decisions/:decisionId', () => {
       _id: '678940615a51bf4a2ed681c0',
       list: '6784d7a5844f23ac9810cf30',
       group: '6784d715844f23ac9810cf28',
-      votes: [
-        {
-          user: '6784d64b844f23ac9810cf22',
-          option: '6784d7b5844f23ac9810cf31',
-        },
-        {
-          user: '6784d64b844f23ac9810cf23',
-          option: '6784d7b5844f23ac9810cf32',
-        },
-        {
-          user: '6784d64b844f23ac9810cf21',
-          option: '6784d7b5844f23ac9810cf31',
-        },
-      ],
       votingStatus: 'completed',
       decisionsProcess_id: '6784d7a5844f23ac9810cf50',
       saveData: {},
@@ -814,23 +778,6 @@ describe('PUT /decisions/:decisionId', () => {
         _id: '678940615a51bf4a2ed681c0',
         list: '6784d7a5844f23ac9810cf30',
         group: '6784d715844f23ac9810cf28',
-        votes: [
-          {
-            user: '6784d64b844f23ac9810cf22',
-            option: '6784d7b5844f23ac9810cf31',
-            _id: expect.any(String),
-          },
-          {
-            user: '6784d64b844f23ac9810cf23',
-            option: '6784d7b5844f23ac9810cf32',
-            _id: expect.any(String),
-          },
-          {
-            user: '6784d64b844f23ac9810cf21',
-            option: '6784d7b5844f23ac9810cf31',
-            _id: expect.any(String),
-          },
-        ],
         votingStatus: 'completed',
         decisionsProcess_id: '6784d7a5844f23ac9810cf50',
         completedAt: expect.any(String),
@@ -847,20 +794,6 @@ describe('PUT /decisions/:decisionId', () => {
       _id: '678940615a51bf4a2ed681c0',
       list: '6784d7a5844f23ac9810cf30',
       group: '6784d715844f23ac9810cf28',
-      votes: [
-        {
-          user: '6784d64b844f23ac9810cf22',
-          option: '6784d7b5844f23ac9810cf31',
-        },
-        {
-          user: '6784d64b844f23ac9810cf23',
-          option: '6784d7b5844f23ac9810cf32',
-        },
-        {
-          user: '6784d64b844f23ac9810cf21',
-          option: '6784d7b5844f23ac9810cf31',
-        },
-      ],
       votingStatus: 'completed',
       decisionsProcess_id: '6784d7a5844f23ac9810cf50',
       saveData: {},

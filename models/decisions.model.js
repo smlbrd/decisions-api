@@ -7,21 +7,6 @@ const decisionSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Group',
     },
-    votes: [
-      {
-        user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-          required: true,
-        },
-        option: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Option',
-          required: true,
-        },
-      },
-      { timestamps: true },
-    ],
     votingStatus: {
       type: String,
       enum: ['not started', 'in progress', 'completed'],
