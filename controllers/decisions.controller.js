@@ -30,7 +30,25 @@ const decisionController = {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
-  }
-
+  },
+  getDecisionByGroupId: async (ctx) => {
+    const groupId = ctx.params.groupId;
+    try {
+      const decisionsInGroup = await Decision.find({ group: groupId });
+      console.log('Decisions found: ', decisionsInGroup);
+      if (decisionsInGroup.length > 0) {
+        ctx.status = 200;
+        ctx.body = decisionsInGroup
+      }
+      else {
+        ctx.status = 404;
+        ctx.body = { error: 'Decisions Not Found' };
+      }
+    }
+    catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
 };
 module.exports = decisionController;
