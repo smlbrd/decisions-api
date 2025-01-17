@@ -1,5 +1,6 @@
 module.exports = [
   {
+    _id: '678940615a51bf4a2ed681c0',
     list: '6784d7a5844f23ac9810cf30',
     group: '6784d715844f23ac9810cf28',
     votes: [
