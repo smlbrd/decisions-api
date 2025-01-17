@@ -65,6 +65,8 @@ route.post('/decisions', decisionController.postDecision);
 route.get('/decisions/:decisionId', decisionController.getDecisionById);
 route.get('/groups/:groupId/decisions', decisionController.getDecisionByGroupId);
 route.get('/users/:userId/decisions', decisionController.getDecisionByUserId);
+route.put('/decisions/:decisionId', decisionController.updateDecisionById);
+route.delete('/decisions/:decisionId', decisionController.deleteDecisionById);
 
 route.get('/lists/:listId', listController.getListByListId);
 route.put('/lists/:listId', listController.updateListById);

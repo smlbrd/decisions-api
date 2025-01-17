@@ -12,6 +12,7 @@ const decisionsProcessesData = require('../database/test-data/test-decisions-pro
 const Option = require('../models/options.model');
 const User = require('../models/users.model');
 const Group = require('../models/groups.model');
+const Decision = require('../models/decisions.model');
 const fs = require('fs/promises');
 
 const uri = process.env.DATABASE_URI;
@@ -691,6 +692,12 @@ describe('GET /users', () => {
       savedLists: ['6784d7a5844f23ac9810cf33'],
     });
   });
+  test('404: not found status if the username does not exist', async () => {
+    const response = await request(app.callback()).get(
+      `/users?username=invalidUsername`
+    );
+    expect(response.status).toBe(404);
+  });
 });
 
 describe('DELETE /groups/:groupId/users/:userId', () => {
@@ -735,8 +742,9 @@ describe('GET /decisions/:decisionId', () => {
   test('200: responds with decision for corresponding decision ID', async () => {
     const decisionId = '678940615a51bf4a2ed681c0';
 
-    const response = await request(app.callback())
-      .get(`/decisions/${decisionId}`);
+    const response = await request(app.callback()).get(
+      `/decisions/${decisionId}`
+    );
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
@@ -758,13 +766,115 @@ describe('GET /decisions/:decisionId', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback())
-      .get(`/decisions/${invalidId}`);
+    const response = await request(app.callback()).get(
+      `/decisions/${invalidId}`
+    );
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decision Not Found');
   });
 });
+
+describe('PUT /decisions/:decisionId', () => {
+  test('200: Edits a decision by decisionId and responds with the updated decision', async () => {
+    const decisionId = '678940615a51bf4a2ed681c0';
+
+    const decisionUpdate = {
+      _id: '678940615a51bf4a2ed681c0',
+      list: '6784d7a5844f23ac9810cf30',
+      group: '6784d715844f23ac9810cf28',
+      votes: [
+        {
+          user: '6784d64b844f23ac9810cf22',
+          option: '6784d7b5844f23ac9810cf31',
+        },
+        {
+          user: '6784d64b844f23ac9810cf23',
+          option: '6784d7b5844f23ac9810cf32',
+        },
+        {
+          user: '6784d64b844f23ac9810cf21',
+          option: '6784d7b5844f23ac9810cf31',
+        },
+      ],
+      votingStatus: 'completed',
+      decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+      saveData: {},
+      completedAt: Date.now(),
+      outcome: '6784d7b5844f23ac9810cf31',
+    };
+
+    const response = await request(app.callback())
+      .put(`/decisions/${decisionId}`)
+      .send(decisionUpdate);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(
+      expect.objectContaining({
+        _id: '678940615a51bf4a2ed681c0',
+        list: '6784d7a5844f23ac9810cf30',
+        group: '6784d715844f23ac9810cf28',
+        votes: [
+          {
+            user: '6784d64b844f23ac9810cf22',
+            option: '6784d7b5844f23ac9810cf31',
+            _id: expect.any(String),
+          },
+          {
+            user: '6784d64b844f23ac9810cf23',
+            option: '6784d7b5844f23ac9810cf32',
+            _id: expect.any(String),
+          },
+          {
+            user: '6784d64b844f23ac9810cf21',
+            option: '6784d7b5844f23ac9810cf31',
+            _id: expect.any(String),
+          },
+        ],
+        votingStatus: 'completed',
+        decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+        completedAt: expect.any(String),
+        outcome: '6784d7b5844f23ac9810cf31',
+        __v: 0,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+      })
+    );
+  });
+  test('404: responds with error if cannot find decisionId', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    const decisionUpdate = {
+      _id: '678940615a51bf4a2ed681c0',
+      list: '6784d7a5844f23ac9810cf30',
+      group: '6784d715844f23ac9810cf28',
+      votes: [
+        {
+          user: '6784d64b844f23ac9810cf22',
+          option: '6784d7b5844f23ac9810cf31',
+        },
+        {
+          user: '6784d64b844f23ac9810cf23',
+          option: '6784d7b5844f23ac9810cf32',
+        },
+        {
+          user: '6784d64b844f23ac9810cf21',
+          option: '6784d7b5844f23ac9810cf31',
+        },
+      ],
+      votingStatus: 'completed',
+      decisionsProcess_id: '6784d7a5844f23ac9810cf50',
+      saveData: {},
+      completedAt: Date.now(),
+      outcome: '6784d7b5844f23ac9810cf31',
+    };
+    const response = await request(app.callback())
+      .put(`/decisions/${invalidId}`)
+      .send(decisionUpdate);
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Decision Not Found');
+  });
+});
+
 describe('GET /groups/:groupId/decisions', () => {
   test('200: responds with decisions for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
@@ -851,5 +961,27 @@ describe('GET /users/:userId/decisions', () => {
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decisions Not Found');
+
+describe('DELETE /decisions/:decisionId', () => {
+  test('204: deletes a decision by decisionId from decisions', async () => {
+    const decisionId = '678940615a51bf4a2ed681c0';
+
+    const response = await request(app.callback()).delete(
+      `/decisions/${decisionId}`
+    );
+
+    expect(response.status).toBe(204);
+    const updatedDecision = await Decision.findById(decisionId);
+    expect(updatedDecision).toBeNull();
+  });
+  test('404: responds with error for when decisionId invalid', async () => {
+    const invalidId = '00000a00000b00000c00000d';
+    
+    const response = await request(app.callback()).delete(
+      `/decisions/${invalidId}`
+    );
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe('Decision Not Found');
   });
 });

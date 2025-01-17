@@ -50,6 +50,26 @@ const decisionController = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+  updateDecisionById: async (ctx) => {
+    const decisionId = ctx.params.decisionId;
+    const decisionInput = ctx.request.body;
+
+    try {
+      const updatedDecision = await Decision.findByIdAndUpdate(decisionId, decisionInput, {
+        new: true,
+      });
+      if (!updatedDecision) {
+        ctx.status = 404;
+        ctx.body = { error: 'Decision Not Found' };
+      } else {
+        ctx.status = 200;
+        ctx.body = updatedDecision;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
   getDecisionByUserId: async (ctx) => {
     const userId = ctx.params.userId;
     let decisionsGroups = [];
@@ -78,6 +98,22 @@ const decisionController = {
       ctx.body = { error: 'Internal server error' };
     }
   },
+  deleteDecisionById: async (ctx) => {
+    const decisionId = ctx.params.decisionId;
+    try {
+      const decision = await Decision.findOneAndDelete({ _id: decisionId });
+
+      if (!decision) {
+        ctx.status = 404;
+        ctx.body = { error: 'Decision Not Found' };
+      } else {
+        ctx.status = 204;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  }
 };
 
 module.exports = decisionController;
