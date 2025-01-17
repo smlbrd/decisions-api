@@ -30,7 +30,26 @@ const decisionController = {
       ctx.status = 500;
       ctx.body = { error: 'Internal server error' };
     }
-  }
+  },
+  updateDecisionById: async (ctx) => {
+    const decisionId = ctx.params.decisionId;
+    const decisionInput = ctx.request.body;
 
+    try {
+      const updatedDecision = await Decision.findByIdAndUpdate(decisionId, decisionInput, {
+        new: true,
+      });
+      if (!updatedDecision) {
+        ctx.status = 404;
+        ctx.body = { error: 'Decision Not Found' };
+      } else {
+        ctx.status = 200;
+        ctx.body = updatedDecision;
+      }
+    } catch (err) {
+      ctx.status = 500;
+      ctx.body = { error: 'Internal server error' };
+    }
+  },
 };
 module.exports = decisionController;
