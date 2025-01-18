@@ -38,7 +38,7 @@ afterAll(async () => {
 
 describe('GET /', () => {
   test('200: API health check', async () => {
-    const response = await request(app.callback()).get('/');
+    const response = await request(app).get('/');
     expect(response.status).toBe(200);
     expect(response.text).toBe('Server online!');
   });
@@ -50,7 +50,7 @@ describe('GET /api', () => {
       `${__dirname}/../endpoints.json`,
       'UTF8'
     );
-    const response = await request(app.callback()).get('/api');
+    const response = await request(app).get('/api');
     expect(response.status).toBe(200);
     expect(response.body).toEqual(JSON.parse(endpoints));
   });
@@ -60,7 +60,7 @@ describe('GET /users/:userId', () => {
   test('200: responds with user for corresponding user ID', async () => {
     const testId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app.callback()).get(`/users/${testId}`);
+    const response = await request(app).get(`/users/${testId}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
@@ -77,7 +77,7 @@ describe('GET /users/:userId', () => {
   test('404: responds with error if cannot match user ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).get(`/users/${invalidId}`);
+    const response = await request(app).get(`/users/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('No results!');
@@ -88,7 +88,7 @@ describe('GET /users/:userId/saved_lists', () => {
   test('200: responds with a populated array of lists based on user ID', async () => {
     const userId = '6784d64b844f23ac9810cf21';
 
-    await request(app.callback())
+    await request(app)
       .get(`/users/${userId}/saved_lists`)
       .expect(200)
       .then(({ body }) => {
@@ -104,7 +104,7 @@ describe('GET /groups/:groupId', () => {
   test('200: responds with group for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
 
-    const response = await request(app.callback()).get(`/groups/${groupId}`);
+    const response = await request(app).get(`/groups/${groupId}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
@@ -127,9 +127,7 @@ describe('GET /groups/:groupId', () => {
 describe('GET /users/:user_id/groups', () => {
   test('200: responds with all groups, with populated members, that a user is part of', async () => {
     const userId = '6784d64b844f23ac9810cf21';
-    const response = await request(app.callback()).get(
-      `/users/${userId}/groups`
-    );
+    const response = await request(app).get(`/users/${userId}/groups`);
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
     expect(response.body[0]).toMatchObject({
@@ -150,7 +148,7 @@ describe('GET /groups/:groupId/members', () => {
   test('200: responds with an array of members for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
 
-    await request(app.callback())
+    await request(app)
       .get(`/groups/${groupId}/members`)
       .expect(200)
       .then(({ body }) => {
@@ -174,9 +172,7 @@ describe('POST /groups', () => {
         { _id: '6784d64b844f23ac9810cf26' },
       ],
     };
-    const response = await request(app.callback())
-      .post('/groups')
-      .send(testGroup);
+    const response = await request(app).post('/groups').send(testGroup);
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
       expect.objectContaining({
@@ -198,7 +194,7 @@ describe('POST /groups', () => {
 describe('GET /lists/:listId', () => {
   test('200: responds with a list for corresponding list ID', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
-    await request(app.callback())
+    await request(app)
       .get(`/lists/${listId}`)
       .expect(200)
       .then(({ body }) => {
@@ -215,7 +211,7 @@ describe('GET /lists/:listId', () => {
   });
   test('404: responds with error if cannot match list ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
-    await request(app.callback())
+    await request(app)
       .get(`/lists/${invalidId}`)
       .expect(404)
       .then(({ body: { error } }) => {
@@ -235,9 +231,7 @@ describe('POST /lists', () => {
       members: ['6784d64b844f23ac9810cf25', '6784d64b844f23ac9810cf26'],
     };
 
-    const response = await request(app.callback())
-      .post('/lists')
-      .send(testList);
+    const response = await request(app).post('/lists').send(testList);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
@@ -269,7 +263,7 @@ describe('PUT /groups/:group_id', () => {
       ],
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/groups/${groupId}`)
       .send(newDescription);
 
@@ -301,7 +295,7 @@ describe('PUT /groups/:group_id', () => {
       ],
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/groups/${invalidGroupId}`)
       .send(newDescription);
 
@@ -314,16 +308,14 @@ describe('DELETE /groups/:groupId', () => {
   test('204: deletes group by groupId', async () => {
     const groupId = '6784d715844f23ac9810cf28';
 
-    const response = await request(app.callback()).delete(`/groups/${groupId}`);
+    const response = await request(app).delete(`/groups/${groupId}`);
 
     expect(response.status).toBe(204);
   });
   test('404: responds with an error message for invalid groupId', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).delete(
-      `/groups/${invalidId}`
-    );
+    const response = await request(app).delete(`/groups/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Group Not Found');
@@ -332,9 +324,7 @@ describe('DELETE /groups/:groupId', () => {
 
 describe('Error handling middleware', () => {
   test('404: responds with an error message for invalid route', async () => {
-    const response = await request(app.callback()).get(
-      '/non-existent-endpoint'
-    );
+    const response = await request(app).get('/non-existent-endpoint');
     expect(response.status).toBe(404);
     expect(response.text).toBe('Not Found');
   });
@@ -348,7 +338,7 @@ describe('PUT /users/:userId', () => {
       name: 'No more unicorns',
       email: 'sparkles@testmail.com',
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/users/${testId}`)
       .send(userUpdate);
     expect(response.status).toBe(200);
@@ -370,7 +360,7 @@ describe('PUT /users/:userId', () => {
       name: 'No more unicorns',
       email: 'sparkles@testmail.com',
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/users/${invalidId}`)
       .send(userUpdate);
     expect(response.status).toBe(404);
@@ -391,9 +381,7 @@ describe('POST: /decisions', () => {
       outcome: null,
     };
 
-    const response = await request(app.callback())
-      .post('/decisions')
-      .send(testDecision);
+    const response = await request(app).post('/decisions').send(testDecision);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
@@ -422,7 +410,7 @@ describe('PUT /lists/:listId', () => {
       owner: '6784d64b844f23ac9810cf21',
       members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/lists/${testId}`)
       .send(listUpdate);
     expect(response.status).toBe(200);
@@ -447,7 +435,7 @@ describe('PUT /lists/:listId', () => {
       owner: '6784d64b844f23ac9810cf21',
       members: ['6784d64b844f23ac9810cf22', '6784d64b844f23ac9810cf23'],
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/lists/${invalidId}`)
       .send(listUpdate);
     expect(response.status).toBe(404);
@@ -458,16 +446,14 @@ describe('DELETE /lists/:listId', () => {
   test('204: deletes list by listId', async () => {
     const listId = '6784d7a5844f23ac9810cf30';
 
-    const response = await request(app.callback()).delete(`/lists/${listId}`);
+    const response = await request(app).delete(`/lists/${listId}`);
 
     expect(response.status).toBe(204);
   });
   test('404: responds with an error message for invalid listId', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).delete(
-      `/lists/${invalidId}`
-    );
+    const response = await request(app).delete(`/lists/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('List Not Found');
@@ -483,9 +469,7 @@ describe('POST /users', () => {
       email: 'hugohipster@testmail.com',
     };
 
-    const response = await request(app.callback())
-      .post('/users')
-      .send(testUser);
+    const response = await request(app).post('/users').send(testUser);
 
     expect(response.status).toBe(201);
     expect(response.body).toEqual(
@@ -511,7 +495,7 @@ describe('POST /lists/:listId/options', () => {
       customFields: ['time investment: 40 mins', 'mood: relax'],
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .post(`/lists/${listId}/options`)
       .send(testOption);
 
@@ -536,7 +520,7 @@ describe('POST /lists/:listId/options', () => {
       customFields: ['time investment: 40 mins', 'mood: relax'],
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .post(`/lists/${listId}/options`)
       .send(testOption);
 
@@ -551,7 +535,7 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
 
     const listId = '6784d7a5844f23ac9810cf30';
 
-    const response = await request(app.callback()).delete(
+    const response = await request(app).delete(
       `/lists/${listId}/options/${optionId}`
     );
 
@@ -565,7 +549,7 @@ describe('DELETE /lists/:listId/options/:optionId', () => {
 
     const listId = '6784d7a5844f23ac9810cf30';
 
-    const response = await request(app.callback()).delete(
+    const response = await request(app).delete(
       `/lists/${listId}/options/${invalidId}`
     );
 
@@ -587,7 +571,7 @@ describe('PUT /lists/:listId/options/:optionId', () => {
       owner: '6784d7a5844f23ac9810cf30',
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/lists/${listId}/options/${optionId}`)
       .send(optionUpdate);
     expect(response.status).toBe(200);
@@ -612,7 +596,7 @@ describe('PUT /lists/:listId/options/:optionId', () => {
       customFields: ['time investment: 15 mins', 'mood: positive'],
       owner: '6784d7a5844f23ac9810cf30',
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/lists/${listId}/options/${invalidId}`)
       .send(optionUpdate);
     expect(response.status).toBe(404);
@@ -624,7 +608,7 @@ describe('DELETE /users/:userId/', () => {
   test('204: deletes user by userId', async () => {
     const userId = '6784d64b844f23ac9810cf22';
 
-    const response = await request(app.callback()).delete(`/users/${userId}`);
+    const response = await request(app).delete(`/users/${userId}`);
 
     expect(response.status).toBe(204);
 
@@ -634,9 +618,7 @@ describe('DELETE /users/:userId/', () => {
   test('404: responds with error message for invalid userId', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).delete(
-      `/users/${invalidId}`
-    );
+    const response = await request(app).delete(`/users/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('User Not Found');
@@ -645,7 +627,7 @@ describe('DELETE /users/:userId/', () => {
 
 describe('GET /users', () => {
   test('200: responds with all the users', async () => {
-    const response = await request(app.callback()).get(`/users`);
+    const response = await request(app).get(`/users`);
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(6);
     expect(response.body[0]).toMatchObject({
@@ -658,9 +640,7 @@ describe('GET /users', () => {
     });
   });
   test('200: can query by username', async () => {
-    const response = await request(app.callback()).get(
-      `/users?username=robo_raptor`
-    );
+    const response = await request(app).get(`/users?username=robo_raptor`);
     expect(response.status).toBe(200);
     expect(response.body).toMatchObject({
       _id: '6784d64b844f23ac9810cf24',
@@ -671,9 +651,7 @@ describe('GET /users', () => {
     });
   });
   test('404: not found status if the username does not exist', async () => {
-    const response = await request(app.callback()).get(
-      `/users?username=invalidUsername`
-    );
+    const response = await request(app).get(`/users?username=invalidUsername`);
     expect(response.status).toBe(404);
   });
 });
@@ -683,7 +661,7 @@ describe('DELETE /groups/:groupId/users/:userId', () => {
     const groupId = '6784d715844f23ac9810cf28';
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app.callback()).delete(
+    const response = await request(app).delete(
       `/groups/${groupId}/users/${userId}`
     );
 
@@ -696,7 +674,7 @@ describe('DELETE /groups/:groupId/users/:userId', () => {
     const groupId = '00000a00000b00000c00000d';
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app.callback()).delete(
+    const response = await request(app).delete(
       `/groups/${groupId}/users/${userId}`
     );
 
@@ -708,7 +686,7 @@ describe('DELETE /groups/:groupId/users/:userId', () => {
     const groupId = '6784d715844f23ac9810cf28';
     const userId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).delete(
+    const response = await request(app).delete(
       `/groups/${groupId}/users/${userId}`
     );
 
@@ -720,9 +698,7 @@ describe('GET /decisions/:decisionId', () => {
   test('200: responds with decision for corresponding decision ID', async () => {
     const decisionId = '678940615a51bf4a2ed681c0';
 
-    const response = await request(app.callback()).get(
-      `/decisions/${decisionId}`
-    );
+    const response = await request(app).get(`/decisions/${decisionId}`);
 
     expect(response.status).toBe(200);
     expect(response.body).toEqual(
@@ -744,9 +720,7 @@ describe('GET /decisions/:decisionId', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).get(
-      `/decisions/${invalidId}`
-    );
+    const response = await request(app).get(`/decisions/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decision Not Found');
@@ -768,7 +742,7 @@ describe('PUT /decisions/:decisionId', () => {
       outcome: '6784d7b5844f23ac9810cf31',
     };
 
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/decisions/${decisionId}`)
       .send(decisionUpdate);
 
@@ -800,7 +774,7 @@ describe('PUT /decisions/:decisionId', () => {
       completedAt: Date.now(),
       outcome: '6784d7b5844f23ac9810cf31',
     };
-    const response = await request(app.callback())
+    const response = await request(app)
       .put(`/decisions/${invalidId}`)
       .send(decisionUpdate);
     expect(response.status).toBe(404);
@@ -812,9 +786,7 @@ describe('GET /groups/:groupId/decisions', () => {
   test('200: responds with decisions for corresponding group ID', async () => {
     const groupId = '6784d715844f23ac9810cf28';
 
-    const response = await request(app.callback()).get(
-      `/groups/${groupId}/decisions`
-    );
+    const response = await request(app).get(`/groups/${groupId}/decisions`);
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
@@ -846,9 +818,7 @@ describe('GET /groups/:groupId/decisions', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).get(
-      `/groups/${invalidId}/decisions`
-    );
+    const response = await request(app).get(`/groups/${invalidId}/decisions`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decisions Not Found');
@@ -858,9 +828,7 @@ describe('GET /users/:userId/decisions', () => {
   test('200: responds with decisions for corresponding user ID', async () => {
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app.callback()).get(
-      `/users/${userId}/decisions`
-    );
+    const response = await request(app).get(`/users/${userId}/decisions`);
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(2);
@@ -892,9 +860,7 @@ describe('GET /users/:userId/decisions', () => {
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).get(
-      `/groups/${invalidId}/decisions`
-    );
+    const response = await request(app).get(`/groups/${invalidId}/decisions`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decisions Not Found');
@@ -905,9 +871,7 @@ describe('DELETE /decisions/:decisionId', () => {
   test('204: deletes a decision by decisionId from decisions', async () => {
     const decisionId = '678940615a51bf4a2ed681c0';
 
-    const response = await request(app.callback()).delete(
-      `/decisions/${decisionId}`
-    );
+    const response = await request(app).delete(`/decisions/${decisionId}`);
 
     expect(response.status).toBe(204);
     const updatedDecision = await Decision.findById(decisionId);
@@ -916,9 +880,7 @@ describe('DELETE /decisions/:decisionId', () => {
   test('404: responds with error for when decisionId invalid', async () => {
     const invalidId = '00000a00000b00000c00000d';
 
-    const response = await request(app.callback()).delete(
-      `/decisions/${invalidId}`
-    );
+    const response = await request(app).delete(`/decisions/${invalidId}`);
 
     expect(response.status).toBe(404);
     expect(response.body.error).toBe('Decision Not Found');

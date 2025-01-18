@@ -11,14 +11,13 @@ const apiController = require('./controllers/api.controller');
 
 const route = new Router();
 const bodyParser = require('koa-bodyparser');
+const ioConnection = require('./socket.io/io');
 
 connectDB();
 
-app.use(
-  cors({
-    origin: 'http://localhost:8081',
-  })
-);
+const server = ioConnection(app);
+
+app.use(cors());
 app.use(bodyParser());
 app.use(route.routes());
 
@@ -63,7 +62,10 @@ route.get('/users/:user_id/groups', groupController.getGroupsByUserId);
 
 route.post('/decisions', decisionController.postDecision);
 route.get('/decisions/:decisionId', decisionController.getDecisionById);
-route.get('/groups/:groupId/decisions', decisionController.getDecisionByGroupId);
+route.get(
+  '/groups/:groupId/decisions',
+  decisionController.getDecisionByGroupId
+);
 route.get('/users/:userId/decisions', decisionController.getDecisionByUserId);
 route.put('/decisions/:decisionId', decisionController.updateDecisionById);
 route.delete('/decisions/:decisionId', decisionController.deleteDecisionById);
@@ -79,4 +81,4 @@ route.delete(
 );
 route.put('/lists/:listId/options/:optionId', listController.updateOptionById);
 
-module.exports = app;
+module.exports = server;
