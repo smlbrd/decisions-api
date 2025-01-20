@@ -716,6 +716,7 @@ describe('GET /decisions/:decisionId', () => {
       })
     );
     expect(typeof response.body.list.options[0]).toBe('object');
+    expect(typeof response.body.group.members[0]).toBe('object');
   });
   test('404: responds with error if cannot match decision ID', async () => {
     const invalidId = '00000a00000b00000c00000d';

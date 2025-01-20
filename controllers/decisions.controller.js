@@ -18,7 +18,7 @@ const decisionController = {
     try {
       const decision = await Decision.findById({ _id: decisionId })
         .populate({ path: 'list', populate: { path: 'options' } })
-        .populate('group');
+        .populate({ path: 'group', populate: { path: 'members' } })
 
       if (!decision) {
         ctx.status = 404;
