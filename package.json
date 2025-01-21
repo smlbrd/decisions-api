@@ -2,10 +2,10 @@
   "name": "decisions-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon listen.js"
+    "start": "node listen.js"
   },
   "keywords": [],
   "author": "",
