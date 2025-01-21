@@ -75,12 +75,18 @@ const decisionController = {
   },
   getDecisionByUserId: async (ctx) => {
     const userId = ctx.params.userId;
+    const votingStatus = ctx.query.votingStatus;
     let decisionsGroups = [];
+
     try {
       const groups = await Group.find({ members: { $in: [userId] } });
 
       for (const group of groups) {
-        const decisions = await Decision.find({ group: group._id });
+        const query = { group: group._id };
+        if (votingStatus) {
+          query.votingStatus = votingStatus;
+        }
+        const decisions = await Decision.find(query);
         decisionsGroups.push(...decisions);
       }
       if (decisionsGroups.length === 0) {

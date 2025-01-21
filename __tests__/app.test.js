@@ -829,23 +829,11 @@ describe('GET /users/:userId/decisions', () => {
   test('200: responds with decisions for corresponding user ID', async () => {
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app).get(`/users/${userId}/decisions`);
+    const response = await request(app).get(`/users/${userId}/decisions?votingStatus=in%20progress`);
 
     expect(response.status).toBe(200);
-    expect(response.body.length).toBe(2);
+    expect(response.body.length).toBe(1);
     expect(response.body[0]).toEqual(
-      expect.objectContaining({
-        _id: '678940615a51bf4a2ed681c0',
-        list: '6784d7a5844f23ac9810cf30',
-        group: '6784d715844f23ac9810cf28',
-        votingStatus: 'not started',
-        decisionsProcess_id: '6784d7a5844f23ac9810cf50',
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
-        __v: 0,
-      })
-    );
-    expect(response.body[1]).toEqual(
       expect.objectContaining({
         _id: '678940615a51bf4a2ed681c1',
         list: '6784d7a5844f23ac9810cf33',
