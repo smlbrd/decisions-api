@@ -10,6 +10,7 @@
 - [Database Management](#database-management)
   - [Database setup](#database-setup)
   - [Database seeding](#database-seeding)
+  - [Running a local server](#running-a-local-server)
 - [Special Thanks](#special-thanks)
 
 ## ❓ About <a name = "about"></a>
