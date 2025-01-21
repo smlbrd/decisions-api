@@ -15,11 +15,21 @@ const ioConnection = (app) => {
     socket.on('hi', (msg) => {
       console.log('hi');
     });
+    socket.on('decision', (decision_id) => {
+      socket.join(decision_id);
+    });
+    // socket.on('logRooms', () => {
+    //   console.log(`Socket ${socket.id} is in rooms:`, [...socket.rooms]);
+    // });
+    socket.on('refresh', ({ room, msg }) => {
+      socket.broadcast.to(room).emit('refresh', msg);
+      console.log(msg);
+    });
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');
     });
   });
-  
+
   return server;
 };
 
