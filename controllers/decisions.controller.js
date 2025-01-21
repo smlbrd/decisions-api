@@ -86,7 +86,10 @@ const decisionController = {
         if (votingStatus) {
           query.votingStatus = votingStatus;
         }
-        const decisions = await Decision.find(query).populate('outcome');
+        const decisions = await Decision.find(query)
+          .populate('outcome')
+          .populate('group')
+          .populate('list');
         decisionsGroups.push(...decisions);
       }
       if (decisionsGroups.length === 0) {
