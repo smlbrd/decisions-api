@@ -35,6 +35,8 @@ _Please note: Your browser may require an extension to format the JSON file to b
 
 These instructions will get a copy of this project running on your local machine for development and testing purposes.
 
+Further documentation on API endpoints, schemas & more can be viewed [in our GitBook](https://app.gitbook.com/o/9FGTwThaMGurW0n6vxZB/s/ijTpUNRfiUUA7V7rmX39/introduction/about)
+
 ### ⛏️ Prerequisites <a name = "prerequisites"></a>
 
 We need to create a clone of the repository, install some dependencies and set up our testing and development databases.
