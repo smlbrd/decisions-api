@@ -23,7 +23,7 @@ It allows a client to perform create, read, update and delete (CRUD) operations 
 
 The project has been designed with the Model View Controller (MVC) pattern, and developed using Test-Driven Development (TDD).
 
-A hosted version of this project is [available online here](). <--- LINK TO THE HOSTED VERSION
+A hosted version of this project is [available online here](https://decisions-api-vlyb.onrender.com).
 
 The frontend component of this project [can be viewed here](https://github.com/dhiransodha/decisions-fe)
 
