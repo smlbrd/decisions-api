@@ -12,11 +12,15 @@ const ioConnection = (app) => {
 
   io.on('connection', (socket) => {
     console.log(`⚡: ${socket.id} user just connected!`);
-    socket.on('hi', (msg) => {
-      console.log('hi');
-    });
     socket.on('decision', (decision_id) => {
       socket.join(decision_id);
+    });
+    socket.on('user', (user_id) => {
+      console.log('user_id: ', user_id);
+      socket.join(user_id);
+    });
+    socket.on('removeUser', (user_id) => {
+      socket.leave(user_id);
     });
     // socket.on('logRooms', () => {
     //   console.log(`Socket ${socket.id} is in rooms:`, [...socket.rooms]);
