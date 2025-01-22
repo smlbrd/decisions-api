@@ -7,7 +7,10 @@ const decisionController = {
     try {
       await newDecision.save();
       ctx.status = 201;
-      ctx.body = newDecision;
+      const decision = await Decision.findById({
+        _id: newDecision._id,
+      }).populate('group');
+      ctx.body = decision;
     } catch (err) {
       ctx.status = 500;
       ctx.body = err;
