@@ -25,9 +25,10 @@ const ioConnection = (app) => {
     // socket.on('logRooms', () => {
     //   console.log(`Socket ${socket.id} is in rooms:`, [...socket.rooms]);
     // });
-    socket.on('refresh', ({ room, msg }) => {
-      socket.broadcast.to(room).emit('refresh', msg);
-      console.log(msg);
+    socket.on('refresh', ({ room, msg, decision_id }) => {
+      const key = 'id' + Math.random().toString(16).slice(2);
+      console.log(key);
+      socket.broadcast.to(room).emit('refresh', msg, key, decision_id);
     });
     socket.on('disconnect', () => {
       console.log('🔥: A user disconnected');
