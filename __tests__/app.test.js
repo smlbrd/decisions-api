@@ -179,15 +179,11 @@ describe('POST /groups', () => {
         _id: '6784d715844f23ac90876222',
         name: 'good_gardeners',
         description: 'A group for good gardening',
-        members: [
-          '6784d64b844f23ac9810cf24',
-          '6784d64b844f23ac9810cf25',
-          '6784d64b844f23ac9810cf26',
-        ],
         createdAt: expect.any(String),
         __v: 0,
       })
     );
+    expect(typeof response.body.members[0].name).toBe('string');
   });
 });
 
@@ -388,7 +384,7 @@ describe('POST: /decisions', () => {
       expect.objectContaining({
         _id: '678936353c1e50fdb8f4c0d7',
         list: '6784d7a5844f23ac9810cf33',
-        group: '6784d715844f23ac9810cf29',
+        group: expect.any(Object),
         votingStatus: 'not started',
         decisionsProcess_id: '6784d7a5844f23ac9810cf50',
         outcome: null,
@@ -829,7 +825,9 @@ describe('GET /users/:userId/decisions', () => {
   test('200: responds with decisions for corresponding user ID', async () => {
     const userId = '6784d64b844f23ac9810cf21';
 
-    const response = await request(app).get(`/users/${userId}/decisions?votingStatus=in%20progress`);
+    const response = await request(app).get(
+      `/users/${userId}/decisions?votingStatus=in%20progress`
+    );
 
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);

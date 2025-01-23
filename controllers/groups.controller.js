@@ -39,7 +39,10 @@ const groupController = {
     try {
       await newGroup.save();
       ctx.status = 201;
-      ctx.body = newGroup;
+      const group = await Group.findById({ _id: newGroup._id }).populate(
+        'members'
+      );
+      ctx.body = group;
     } catch (err) {
       ctx.status = 500;
       ctx.body = err;
@@ -107,7 +110,7 @@ const groupController = {
   removeUserByIdFromGroupById: async (ctx) => {
     const groupId = ctx.params.groupId;
     const userId = ctx.params.userId;
-  
+
     try {
       const group = await Group.findById(groupId);
       if (!group) {
@@ -116,19 +119,19 @@ const groupController = {
         return;
       }
       const user = group.members.some(
-        member => member._id.toString() === userId
+        (member) => member._id.toString() === userId
       );
-  
+
       if (!user) {
         ctx.status = 404;
         ctx.body = { error: 'User Not Found' };
         return;
       }
       group.members = group.members.filter(
-        member => member._id.toString() !== userId
+        (member) => member._id.toString() !== userId
       );
       await group.save();
-  
+
       ctx.status = 204;
     } catch (err) {
       ctx.status = 500;
